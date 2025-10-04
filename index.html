@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VOIDSTEEL - Five creators. Infinite possibilities.</title>
+    <title>VOIDSTEEL - Selected Geniuses. Infinite possibilities.</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
         
@@ -627,6 +627,58 @@
         .status.error {
             color: #ff4444;
         }
+        
+        /* New Announcement Board Styles */
+        .announcement-board {
+            margin-top: 50px;
+            background: rgba(30, 30, 30, 0.7);
+            border-radius: 8px;
+            padding: 30px;
+            border: 2px solid var(--cyan);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            position: relative;
+        }
+
+        .announcement-board::before {
+            content: 'SYSTEM ALERT';
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 5px 15px;
+            background: linear-gradient(90deg, var(--cyan), var(--magenta));
+            color: #000;
+            font-weight: 700;
+            font-size: 0.8rem;
+            border-radius: 5px;
+            letter-spacing: 2px;
+        }
+
+        .announcement-item {
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            list-style: none;
+        }
+
+        .announcement-item:last-child {
+            border-bottom: none;
+        }
+
+        .announcement-date {
+            font-size: 0.8rem;
+            color: var(--magenta);
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .announcement-text {
+            font-size: 1rem;
+            line-height: 1.5;
+            color: var(--text-primary);
+        }
 
         /* Responsive */
         @media (max-width: 768px) {
@@ -681,7 +733,8 @@
             <div class="nav-logo">VS</div>
             <div class="nav-links">
                 <a href="#projects">Projects</a>
-                <a href="#console">Console</a> <a href="#members">Members</a>
+                <a href="#console">Console</a> 
+                <a href="#announcement">News</a> <a href="#members">Members</a>
                 <a href="#about">About</a>
             </div>
         </div>
@@ -708,7 +761,7 @@
         </div>
         <div class="hero-content">
             <h1 class="logo">VOIDSTEEL</h1>
-            <p class="tagline">Five creators. Infinite possibilities. Explore the projects within the Void.</p>
+            <p class="tagline">Selected Geniuses. Infinite possibilities. Explore the projects within the Void.</p>
         </div>
     </section>
     
@@ -762,6 +815,26 @@
         </div>
     </section>
 
+    <section id="announcement">
+        <h2>Network Status</h2>
+        <div class="announcement-board">
+            <ul>
+                <li class="announcement-item">
+                    <span class="announcement-date">[04.10.2025]</span>
+                    <p class="announcement-text">All Members Take Notice VOIDSTEEL's Website Has Been Deployed Along With The Website, The Encoder/Decoder Has Also Been Made Public.</p>
+                </li>
+                <li class="announcement-item">
+                    <span class="announcement-date">[04.10.2025]</span>
+                    <p class="announcement-text">Project Netherite Block Will Continue As The Members Will Continue To Contribute To The Project.</p>
+                </li>
+                <li class="announcement-item">
+                    <span class="announcement-date">[04.10.2025]</span>
+                    <p class="announcement-text">ALL MEMBERS MUST JOIN THE OFFICIAL DISCORD SERVER OF VOIDSTEEL THAT IS MADE BY MANAZ</p>
+                </li>
+            </ul>
+        </div>
+    </section>
+
     <section id="members">
         <h2>Members</h2>
         <div class="members-grid">
@@ -783,6 +856,10 @@
             </div>
             <div class="member-card">
                 <h3 class="member-name">OniJailer</h3>
+                <p class="member-role">Assistant</p>
+            </div>
+            <div class="member-card">
+                <h3 class="member-name">Noxx</h3>
                 <p class="member-role">Core Member</p>
             </div>
         </div>
