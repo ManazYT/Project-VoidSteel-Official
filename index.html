@@ -23,6 +23,14 @@ box-sizing: border-box;
 --text-secondary: #a0a0a0;
 /* Added for Console */
 --border-glow: rgba(0, 255, 255, 0.3);
+/* ADDED FOR MEMBER EFFECTS */
+--scifi-neon: #ff00ff; /* ManaZ */
+--electric-yellow: #fff34c; /* JurryDegree */
+--infinity-gold: #ffd700; /* InfiniteIntensity */
+--fire-red: #ff4500; /* OniJailer */
+--dragon-green: #00ff88; /* Noxx */
+--money-green: #00c853; /* Countless */
+--yeti-blue: #a0e0ff; /* Yeteu */
 }
 
 body {
@@ -391,8 +399,16 @@ transition: all 0.3s ease;
 text-align: center;
 position: relative;
 overflow: hidden;
+z-index: 1; /* For stacking pseudo-elements for effects */
+cursor: pointer; /* Explicitly set cursor for clickability */
+/* FIX: Disable text selection to prevent click issues */
+-webkit-user-select: none; /* Safari */
+-moz-user-select: none; /* Firefox */
+-ms-user-select: none; /* IE10+ */
+user-select: none; /* Standard */
 }
 
+/* Default bottom bar (hidden for themed cards) */
 .member-card::after {
 content: '';
 position: absolute;
@@ -420,12 +436,262 @@ font-weight: 700;
 margin-bottom: 10px;
 text-transform: uppercase;
 letter-spacing: 0.05em;
+position: relative;
+z-index: 2;
 }
 
 .member-role {
 font-size: 0.9rem;
 color: var(--cyan);
 font-weight: 400;
+position: relative;
+z-index: 2;
+}
+
+/* --- ACTUAL MEMBER EFFECTS --- */
+
+/* Keyframes for ManaZ effects */
+@keyframes hexScroll {
+    0% { background-position: 0% 0%; }
+    100% { background-position: -200% -200%; }
+}
+@keyframes metallicShimmer {
+    0% { transform: skewX(-45deg) translateX(-150%); }
+    100% { transform: skewX(-45deg) translateX(150%); }
+}
+
+/* 1. ManaZ - VOIDSTEEL ULTIMATE EFFECT */
+@keyframes neonPulse {
+    0% { opacity: 0.5; }
+    50% { opacity: 0.9; }
+    100% { opacity: 0.5; }
+}
+.manaz-card {
+    /* Triple Layered Border Glow */
+    border: 2px solid var(--scifi-neon);
+    box-shadow: 
+        0 0 5px var(--scifi-neon), 
+        0 0 15px var(--cyan), 
+        0 0 30px rgba(255, 0, 255, 0.8);
+    background: rgba(10, 10, 10, 0.95);
+    z-index: 10;
+}
+.manaz-card::before {
+    /* Scrolling Hex Background (The Void) */
+    content: '01FCE13A9B2D84C701FCE13A9B2D84C701FCE13A9B2D84C7';
+    position: absolute;
+    top: -100%; left: -100%;
+    width: 300%; height: 300%;
+    z-index: -2;
+    background: repeating-linear-gradient(0deg, var(--scifi-neon) 0px, transparent 1px, transparent 20px),
+                repeating-linear-gradient(90deg, var(--scifi-neon) 0px, transparent 1px, transparent 20px);
+    background-size: 20px 20px;
+    font-family: monospace;
+    font-size: 10px;
+    line-height: 10px;
+    white-space: pre;
+    color: rgba(0, 255, 255, 0.1);
+    opacity: 0.05; /* Very subtle text */
+    animation: hexScroll 120s linear infinite, neonPulse 3s infinite alternate;
+}
+.manaz-card::after {
+    /* Metallic Shimmer Sweep (The Steel) */
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 3; /* Above ::before, below content */
+    background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.1) 40%, rgba(0, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.1) 60%, transparent 100%);
+    opacity: 0.7;
+    animation: metallicShimmer 5s linear infinite;
+    pointer-events: none;
+}
+.manaz-card .member-role, .manaz-card .member-name { 
+    color: var(--text-primary);
+    text-shadow: 0 0 8px var(--cyan), 0 0 8px var(--scifi-neon); 
+}
+
+/* 2. JurryDegree - Electric/Lightning Effect (Flashing Border) */
+@keyframes lightningFlash {
+    0%, 100% { box-shadow: 0 0 0 var(--electric-yellow); }
+    10%, 60% { box-shadow: 0 0 15px var(--electric-yellow), 0 0 30px rgba(255, 243, 76, 0.5); }
+    15%, 65% { box-shadow: 0 0 5px var(--electric-yellow); }
+}
+@keyframes pulse {
+    from { transform: scale(1); }
+    to { transform: scale(1.1); }
+}
+.degree-card {
+    border: 2px solid var(--electric-yellow);
+    animation: lightningFlash 1.5s infinite steps(5);
+}
+.degree-card::before {
+    content: '⚡';
+    position: absolute;
+    top: 5px; right: 10px;
+    font-size: 1.5rem;
+    color: var(--electric-yellow);
+    text-shadow: 0 0 10px var(--electric-yellow);
+    opacity: 0.8;
+    animation: pulse 0.5s infinite alternate;
+}
+.degree-card .member-role { color: var(--electric-yellow); }
+
+
+/* 3. InfiniteIntensity - Infinity Effect (Shifting Gold Vortex) */
+@keyframes goldVortex {
+    from { background-position: 0% 0%; }
+    to { background-position: 200% 200%; }
+}
+.intensity-card {
+    border: 2px solid var(--infinity-gold);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+    background: repeating-linear-gradient(135deg, rgba(20, 20, 20, 0.8) 0%, rgba(20, 20, 20, 0.8) 5%, rgba(255, 215, 0, 0.1) 8%, rgba(20, 20, 20, 0.8) 11%);
+    background-size: 200% 200%;
+    animation: goldVortex 10s linear infinite;
+}
+.intensity-card .member-role { color: var(--infinity-gold); text-shadow: 0 0 5px var(--infinity-gold); }
+
+/* 4. OniJailer - Fire Effect (Flickering Flames) */
+@keyframes fireFlicker {
+    0%, 100% { box-shadow: 0 0 15px var(--fire-red), 0 0 30px rgba(255, 100, 0, 0.6); }
+    50% { box-shadow: 0 0 10px var(--fire-red), 0 0 25px rgba(255, 165, 0, 0.8); }
+}
+.jailer-card {
+    border: 2px solid var(--fire-red);
+    background: radial-gradient(circle at bottom, rgba(255, 69, 0, 0.2) 0%, rgba(20, 20, 20, 0.8) 70%);
+    animation: fireFlicker 0.2s infinite alternate; /* Fast flicker */
+}
+.jailer-card::after {
+    /* Glowing fire base (overrides default after) */
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, #ff0000, #ffa500);
+}
+.jailer-card .member-role { color: var(--fire-red); }
+
+/* 5. Noxx - Dragon Effect (Emerald Scales & Shimmer) */
+@keyframes scaleShimmer {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 100% 100%; }
+}
+.noxx-card {
+    border: 2px solid var(--dragon-green);
+    box-shadow: 0 0 18px var(--dragon-green);
+    /* Repeating gradient for 'scales' */
+    background: repeating-linear-gradient(45deg, rgba(30, 30, 30, 0.9) 0, rgba(30, 30, 30, 0.9) 3px, rgba(0, 255, 136, 0.1) 4px, rgba(20, 20, 20, 0.9) 7px);
+    background-size: 20px 20px;
+    animation: scaleShimmer 20s linear infinite;
+}
+.noxx-card .member-role { color: var(--dragon-green); text-shadow: 0 0 5px var(--dragon-green); }
+
+/* 6. Countless - Money Effect (Fast Dollar Sign Flash) */
+@keyframes fastFlash {
+    0%, 100% { opacity: 0.1; }
+    50% { opacity: 0.9; }
+}
+
+.countless-card {
+    border: 2px solid var(--money-green);
+    box-shadow: 0 0 12px var(--money-green);
+}
+.countless-card::before {
+    content: '$$$$$'; /* UPDATED: 5 symbols */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Center the large symbol */
+    width: 100%;
+    height: 100%;
+    font-size: 6rem; /* ADJUSTED: Reduced size to fit 5 symbols */
+    line-height: 1;
+    color: var(--money-green);
+    text-shadow: 0 0 30px var(--money-green);
+    animation: fastFlash 0.05s infinite alternate; /* Very aggressive flash */
+    pointer-events: none;
+    z-index: 0;
+    font-family: Arial, sans-serif;
+}
+.countless-card::after {
+    /* Overriding default after for solid color */
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--money-green);
+}
+.countless-card .member-role { color: var(--money-green); }
+
+/* 7. Yeteu - Yeti Effect (Frozen Crystal) */
+@keyframes iceShimmer {
+    from { background-position: 0% 0%; }
+    to { background-position: 100% 100%; }
+}
+.yeteu-card {
+    border: 2px solid var(--yeti-blue);
+    box-shadow: 0 0 20px rgba(160, 224, 255, 0.8), inset 0 0 10px rgba(255, 255, 255, 0.3);
+    /* Frosted/Crystal texture */
+    background: repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.05) 0, rgba(255, 255, 255, 0.05) 1px, transparent 2px, transparent 10px);
+    background-size: 40px 40px;
+    animation: iceShimmer 30s linear infinite;
+}
+.yeteu-card .member-role { color: var(--yeti-blue); text-shadow: 0 0 5px var(--yeti-blue); }
+
+/* --- NEW CLICK EFFECT CLASSES AND KEYFRAMES --- */
+@keyframes electricShock {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 15px var(--electric-yellow); }
+    50% { transform: scale(1.05); box-shadow: 0 0 40px var(--electric-yellow); }
+}
+
+@keyframes coinPop {
+    0% { opacity: 1; transform: translateY(0) scale(1); }
+    100% { opacity: 0; transform: translateY(-50px) scale(0.5) translateX(calc(var(--rand-x) * 1px)); }
+}
+/* This class is used by ManaZ and JurryDegree */
+.shocked {
+    animation: electricShock 0.2s ease-out 2;
+}
+/* This class is used by OniJailer */
+.onifire {
+    background: radial-gradient(circle at center, #ff8c00 0%, #ff4500 50%, rgba(30, 30, 30, 0.9) 100%) !important;
+    transition: background 0.1s;
+}
+/* This class is used by Yeteu */
+.yeteu-frost {
+    filter: blur(2px) brightness(1.2);
+    transition: filter 0.2s;
+}
+
+/* For InfiniteIntensity Gold Trail */
+.gold-trail-particle {
+    position: fixed;
+    width: 5px;
+    height: 5px;
+    background: var(--infinity-gold);
+    border-radius: 50%;
+    box-shadow: 0 0 5px var(--infinity-gold);
+    pointer-events: none;
+    animation: coinPop 0.5s ease-out forwards;
+    z-index: 9999;
+}
+
+
+/* Generic hover cleanup to not clash with custom effects */
+.member-card:hover {
+    transform: translateY(-5px); /* Slightly more emphasis on lift */
+    background: rgba(30, 30, 30, 0.9);
+}
+/* Re-enable default after transition if custom one wasn't used */
+.member-card:not(.jailer-card):not(.countless-card):hover::after {
+    transform: scaleX(1);
 }
 
 /* About Section */
@@ -839,28 +1105,32 @@ max-width: 200px;
 <section id="members">
 <h2>Members</h2>
 <div class="members-grid">
-<div class="member-card">
+<div class="member-card manaz-card">
 <h3 class="member-name">ManaZ</h3>
 <p class="member-role">Leader</p>
 </div>
-<div class="member-card">
+<div class="member-card degree-card">
 <h3 class="member-name">JurryDegree</h3>
 <p class="member-role">Core Member</p>
 </div>
-<div class="member-card">
+<div class="member-card intensity-card">
 <h3 class="member-name">InfiniteIntensity</h3>
 <p class="member-role">Core Member</p>
 </div>
-<div class="member-card">
+<div class="member-card countless-card">
 <h3 class="member-name">Countless</h3>
 <p class="member-role">Core Member</p>
 </div>
-<div class="member-card">
+<div class="member-card jailer-card">
 <h3 class="member-name">OniJailer</h3>
 <p class="member-role">Assistant</p>
 </div>
-<div class="member-card">
+<div class="member-card noxx-card">
 <h3 class="member-name">Noxx</h3>
+<p class="member-role">Core Member</p>
+</div>
+<div class="member-card yeteu-card">
+<h3 class="member-name">Yeteu</h3>
 <p class="member-role">Core Member</p>
 </div>
 </div>
@@ -921,7 +1191,7 @@ document.documentElement.style.setProperty('--mouse-x', x);
 document.documentElement.style.setProperty('--mouse-y', y);
 });
 
-// --- Console JavaScript Logic - Merged from voidsteel_console.html ---
+// --- Console JavaScript Logic ---
 
 // Enhanced Encoder/Decoder maps with better cipher
 const encodeMap = {
@@ -1093,6 +1363,108 @@ particle.style.boxShadow = '';
 });
 }, 100);
 }
+
+// --- NEW CLICK EFFECTS LOGIC ---
+
+// New function for creating gold trail particles (used by InfiniteIntensity)
+function createGoldParticle(x, y) {
+    const p = document.createElement('div');
+    p.classList.add('gold-trail-particle');
+    // Randomize position slightly for a shower effect
+    p.style.left = `${x + (Math.random() - 0.5) * 50}px`;
+    p.style.top = `${y + (Math.random() - 0.5) * 50}px`;
+    // Randomize duration and delay
+    p.style.animationDuration = `${0.3 + Math.random() * 0.4}s`;
+    document.body.appendChild(p);
+
+    // Remove the element after the animation is finished
+    p.addEventListener('animationend', () => p.remove());
+}
+
+// Function to handle the specific effects of each card on click
+function handleMemberClick(card) {
+    // Get the base name from the first class name that ends with '-card'
+    const nameClass = Array.from(card.classList).find(cls => cls.endsWith('-card'));
+    if (!nameClass) return; // Exit if no member class found
+
+    const memberName = nameClass.replace('-card', '');
+    const rect = card.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    
+    // DEBUG: Confirm the click is registering in JavaScript
+    console.log(`[VOIDSTEEL CLICK DEBUG] Event registered for: ${memberName}`);
+
+    // Store original transition (which is 'all 0.3s ease' from CSS)
+    const originalTransition = card.style.transition;
+
+    // --- UNIVERSAL CLICK PRESS DOWN EFFECT ---
+    // Ensure the transform is applied immediately by removing transition
+    card.style.transition = 'none'; 
+    card.style.transform = 'scale(0.98)';
+    
+    // Restore transition and normal scale after 100ms
+    setTimeout(() => {
+        card.style.transform = ''; // Removes the scale(0.98)
+        card.style.transition = originalTransition; // Restores the default 0.3s ease
+    }, 100);
+    // --- END UNIVERSAL CLICK PRESS DOWN EFFECT ---
+
+    switch (memberName) {
+        case 'manaz':
+            // ManaZ (Leader): Ultimate/Cyber-Access
+            card.classList.add('shocked');
+            setTimeout(() => card.classList.remove('shocked'), 400);
+            showStatus('🔑 VOIDSTEEL: ACCESS GRANTED. PRIME DIRECTIVE RECEIVED.', false);
+            break;
+        case 'degree':
+            // JurryDegree (Electric): Electric Shock
+            card.classList.add('shocked');
+            setTimeout(() => card.classList.remove('shocked'), 400);
+            showStatus('⚡ ELECTRIC FIELD RECALIBRATED.', false);
+            break;
+        case 'intensity':
+            // InfiniteIntensity (Infinity/Gold): Gold Particle Explosion/Trail
+            for (let i = 0; i < 20; i++) {
+                createGoldParticle(centerX, centerY);
+            }
+            showStatus('✨ INFINITE RESOURCES MANIFESTED.', false);
+            break;
+        case 'countless':
+            // Countless (Money): Aggressive flash / Money Spawn
+            showStatus('💰 TRANSACTION COMPLETE. FUNDS ACQUIRED.');
+            break;
+        case 'jailer':
+            // OniJailer (Fire): Fire Burst
+            card.classList.add('onifire');
+            setTimeout(() => card.classList.remove('onifire'), 300);
+            showStatus('🔥 PURGING THE VOID OF IMPURITIES.');
+            break;
+        case 'noxx':
+            // Noxx (Dragon/Scales): Mystic Code Decryption
+            card.style.opacity = '0.5';
+            setTimeout(() => card.style.opacity = '1', 50);
+            showStatus('🐉 ANCIENT CODE DECRYPTED. KNOWLEDGE UNLOCKED.', false);
+            break;
+        case 'yeteu':
+            // Yeteu (Yeti/Ice): Frost/Ice Burst
+            card.classList.add('yeteu-frost');
+            setTimeout(() => card.classList.remove('yeteu-frost'), 300);
+            showStatus('❄️ SUB-ZERO PROTOCOL ACTIVATED.');
+            break;
+    }
+}
+
+// Attach event listeners to all member cards
+document.querySelectorAll('.member-card').forEach(card => {
+    card.addEventListener('click', (e) => {
+        // Prevent default navigation/form submission if this was a link/button
+        e.preventDefault();
+        
+        // Pass the clicked card element to the handler
+        handleMemberClick(e.currentTarget);
+    });
+});
 </script>
 </body>
 </html>
