@@ -23,14 +23,23 @@ box-sizing: border-box;
 --text-secondary: #a0a0a0;
 /* Added for Console */
 --border-glow: rgba(0, 255, 255, 0.3);
-/* ADDED FOR MEMBER EFFECTS */
---scifi-neon: #ff00ff; /* ManaZ */
---electric-yellow: #fff34c; /* JurryDegree */
---infinity-gold: #ffd700; /* InfiniteIntensity */
---fire-red: #ff4500; /* OniJailer */
---dragon-green: #00ff88; /* Noxx */
---money-green: #00c853; /* Countless */
---yeti-blue: #a0e0ff; /* Yeteu */
+
+/* --- NEW MEMBER TEXT THEME COLORS --- */
+--manaz-start-color: #5d00ff;   /* ManaZ: Faint Violet/Void (UPDATED) */
+--manaz-end-color: #0a0a0a;     /* ManaZ: Obsidian black */
+--void-pulse: #3a007a; /* Darker purple for the void pulse (NEW) */
+--intensity-start-color: #00fff7; /* InfiniteIntensity: Cyan plasma */
+--intensity-end-color: #aaff00; /* InfiniteIntensity: Neon green */
+--yeteu-start-color: #7d00ff; /* Yeteu: Neon indigo */
+--yeteu-end-color: #00c8ff;   /* Yeteu: Data blue */
+--degree-start-color: #b0b0b0; /* JurryDegree: Polished steel */
+--degree-end-color: #00aaff;   /* JurryDegree: Electric blue */
+--jailer-start-color: #ff2a00; /* OniJailer: Blood red */
+--jailer-end-color: #330000;   /* OniJailer: Burnt ember */
+--noxx-start-color: #000000;   /* Noxx: Deep black core */
+--noxx-end-color: #7a00ff;     /* Noxx: Violet edge glow */
+--countless-start-color: #ffffff; /* Countless: White */
+--countless-end-color: #33ffff;   /* Countless: Cyan */
 }
 
 body {
@@ -39,6 +48,8 @@ background: var(--dark-bg);
 color: var(--text-primary);
 overflow-x: hidden;
 position: relative;
+/* Required for voidRippleFilter animation */
+transition: filter 1.5s;
 }
 
 /* Scrollbar styling */
@@ -438,6 +449,8 @@ text-transform: uppercase;
 letter-spacing: 0.05em;
 position: relative;
 z-index: 2;
+/* Default text color is white/primary, overridden by themed text gradient */
+color: var(--text-primary);
 }
 
 .member-role {
@@ -448,251 +461,346 @@ position: relative;
 z-index: 2;
 }
 
-/* --- ACTUAL MEMBER EFFECTS --- */
+/* --- NEW CSS KEYFRAMES (ManaZ originals added here) --- */
 
-/* Keyframes for ManaZ effects */
-@keyframes hexScroll {
-    0% { background-position: 0% 0%; }
-    100% { background-position: -200% -200%; }
-}
-@keyframes metallicShimmer {
-    0% { transform: skewX(-45deg) translateX(-150%); }
-    100% { transform: skewX(-45deg) translateX(150%); }
-}
-
-/* 1. ManaZ - VOIDSTEEL ULTIMATE EFFECT */
-@keyframes neonPulse {
-    0% { opacity: 0.5; }
-    50% { opacity: 0.9; }
-    100% { opacity: 0.5; }
-}
-.manaz-card {
-    /* Triple Layered Border Glow */
-    border: 2px solid var(--scifi-neon);
-    box-shadow: 
-        0 0 5px var(--scifi-neon), 
-        0 0 15px var(--cyan), 
-        0 0 30px rgba(255, 0, 255, 0.8);
-    background: rgba(10, 10, 10, 0.95);
-    z-index: 10;
-}
-.manaz-card::before {
-    /* Scrolling Hex Background (The Void) */
-    content: '01FCE13A9B2D84C701FCE13A9B2D84C701FCE13A9B2D84C7';
-    position: absolute;
-    top: -100%; left: -100%;
-    width: 300%; height: 300%;
-    z-index: -2;
-    background: repeating-linear-gradient(0deg, var(--scifi-neon) 0px, transparent 1px, transparent 20px),
-                repeating-linear-gradient(90deg, var(--scifi-neon) 0px, transparent 1px, transparent 20px);
-    background-size: 20px 20px;
-    font-family: monospace;
-    font-size: 10px;
-    line-height: 10px;
-    white-space: pre;
-    color: rgba(0, 255, 255, 0.1);
-    opacity: 0.05; /* Very subtle text */
-    animation: hexScroll 120s linear infinite, neonPulse 3s infinite alternate;
-}
-.manaz-card::after {
-    /* Metallic Shimmer Sweep (The Steel) */
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 3; /* Above ::before, below content */
-    background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.1) 40%, rgba(0, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.1) 60%, transparent 100%);
-    opacity: 0.7;
-    animation: metallicShimmer 5s linear infinite;
-    pointer-events: none;
-}
-.manaz-card .member-role, .manaz-card .member-name { 
-    color: var(--text-primary);
-    text-shadow: 0 0 8px var(--cyan), 0 0 8px var(--scifi-neon); 
+/* ManaZ: Idle Glitch Flicker */
+@keyframes glitchFlicker {
+    0%, 100% { clip-path: inset(0 0 0 0); }
+    1% { clip-path: inset(2px 0 2px 0); opacity: 0.8; }
+    2% { clip-path: inset(0 2px 0 0); opacity: 0.9; }
+    3% { clip-path: inset(0 0 2px 0); opacity: 0.85; }
+    3.5% { clip-path: inset(0 0 0 0); opacity: 1; }
+    100% { clip-path: inset(0 0 0 0); }
 }
 
-/* 2. JurryDegree - Electric/Lightning Effect (Flashing Border) */
-@keyframes lightningFlash {
-    0%, 100% { box-shadow: 0 0 0 var(--electric-yellow); }
-    10%, 60% { box-shadow: 0 0 15px var(--electric-yellow), 0 0 30px rgba(255, 243, 76, 0.5); }
-    15%, 65% { box-shadow: 0 0 5px var(--electric-yellow); }
+/* ManaZ: Text Fracture (On Hover) */
+@keyframes textFracture {
+    0% { transform: translate(0, 0); opacity: 1; filter: blur(0); }
+    25% { transform: translate(-3px, 2px); opacity: 0.3; filter: blur(2px); }
+    50% { transform: translate(3px, -2px) skewX(5deg); opacity: 0.1; filter: blur(4px); }
+    75% { transform: translate(-1px, 1px); opacity: 0.8; filter: blur(0.5px); }
+    100% { transform: translate(0, 0); opacity: 1; filter: blur(0); text-shadow: 0 0 15px #ffffff, 0 0 30px var(--manaz-start-color); }
 }
-@keyframes pulse {
-    from { transform: scale(1); }
-    to { transform: scale(1.1); }
-}
-.degree-card {
-    border: 2px solid var(--electric-yellow);
-    animation: lightningFlash 1.5s infinite steps(5);
-}
-.degree-card::before {
-    content: '⚡';
-    position: absolute;
-    top: 5px; right: 10px;
-    font-size: 1.5rem;
-    color: var(--electric-yellow);
-    text-shadow: 0 0 10px var(--electric-yellow);
-    opacity: 0.8;
-    animation: pulse 0.5s infinite alternate;
-}
-.degree-card .member-role { color: var(--electric-yellow); }
 
+/* ManaZ: Void Pulse (On Hover ::before) */
+@keyframes voidPulseExpand {
+    0% { transform: scale(0.1) translate(-50%, -50%); opacity: 0.8; box-shadow: 0 0 0 0 var(--manaz-start-color); }
+    50% { transform: scale(1.5) translate(-50%, -50%); opacity: 0.2; box-shadow: 0 0 50px 20px var(--void-pulse); }
+    100% { transform: scale(2.5) translate(-50%, -50%); opacity: 0; box-shadow: none; }
+}
 
-/* 3. InfiniteIntensity - Infinity Effect (Shifting Gold Vortex) */
-@keyframes goldVortex {
-    from { background-position: 0% 0%; }
-    to { background-position: 200% 200%; }
+/* Global ManaZ Hover Effect (Screen Ripple) */
+@keyframes voidRippleFilter {
+    0%, 100% { filter: contrast(1) brightness(1); }
+    50% { filter: contrast(1.1) brightness(0.9) hue-rotate(-5deg); }
 }
-.intensity-card {
-    border: 2px solid var(--infinity-gold);
-    box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
-    background: repeating-linear-gradient(135deg, rgba(20, 20, 20, 0.8) 0%, rgba(20, 20, 20, 0.8) 5%, rgba(255, 215, 0, 0.1) 8%, rgba(20, 20, 20, 0.8) 11%);
-    background-size: 200% 200%;
-    animation: goldVortex 10s linear infinite;
-}
-.intensity-card .member-role { color: var(--infinity-gold); text-shadow: 0 0 5px var(--infinity-gold); }
 
-/* 4. OniJailer - Fire Effect (Flickering Flames) */
-@keyframes fireFlicker {
-    0%, 100% { box-shadow: 0 0 15px var(--fire-red), 0 0 30px rgba(255, 100, 0, 0.6); }
-    50% { box-shadow: 0 0 10px var(--fire-red), 0 0 25px rgba(255, 165, 0, 0.8); }
-}
-.jailer-card {
-    border: 2px solid var(--fire-red);
-    background: radial-gradient(circle at bottom, rgba(255, 69, 0, 0.2) 0%, rgba(20, 20, 20, 0.8) 70%);
-    animation: fireFlicker 0.2s infinite alternate; /* Fast flicker */
-}
-.jailer-card::after {
-    /* Glowing fire base (overrides default after) */
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 3px;
-    background: linear-gradient(90deg, #ff0000, #ffa500);
-}
-.jailer-card .member-role { color: var(--fire-red); }
+/* Old keyframes are removed: corePulse, lightStreaks, emberTrail, auraFlash, dynamicVibrate, electricSweep, etc. */
+/* Keeping only the essential, non-ManaZ keyframes below */
 
-/* 5. Noxx - Dragon Effect (Emerald Scales & Shimmer) */
-@keyframes scaleShimmer {
+/* InfiniteIntensity: Dynamic vibration / Electric pulse sweep */
+@keyframes dynamicVibrate {
+    0% { transform: translate(0.5px, 0.5px); }
+    50% { transform: translate(-0.5px, -0.5px); }
+    100% { transform: translate(0.5px, 0.5px); }
+}
+@keyframes electricSweep {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+/* Yeteu: Data glitch / Letter phase out */
+@keyframes dataGlitch {
+    0%, 100% { text-shadow: none; }
+    50% { text-shadow: 1px 0 0 var(--yeteu-end-color), -1px 0 0 var(--yeteu-start-color); transform: translateX(1px); }
+}
+@keyframes microFlicker {
+    0%, 100% { filter: brightness(1); }
+    50% { filter: brightness(1.2); }
+}
+
+/* JurryDegree: Linear shine / Spark discharge */
+@keyframes linearShine {
     0% { background-position: 0% 0%; }
     100% { background-position: 100% 100%; }
 }
-.noxx-card {
-    border: 2px solid var(--dragon-green);
-    box-shadow: 0 0 18px var(--dragon-green);
-    /* Repeating gradient for 'scales' */
-    background: repeating-linear-gradient(45deg, rgba(30, 30, 30, 0.9) 0, rgba(30, 30, 30, 0.9) 3px, rgba(0, 255, 136, 0.1) 4px, rgba(20, 20, 20, 0.9) 7px);
-    background-size: 20px 20px;
-    animation: scaleShimmer 20s linear infinite;
-}
-.noxx-card .member-role { color: var(--dragon-green); text-shadow: 0 0 5px var(--dragon-green); }
 
-/* 6. Countless - Money Effect (Fast Dollar Sign Flash) */
-@keyframes fastFlash {
-    0%, 100% { opacity: 0.1; }
+/* OniJailer: Ember pulse / Heat distortion ripple */
+@keyframes emberPulse {
+    0%, 100% { color: var(--jailer-start-color); text-shadow: 0 0 10px var(--jailer-start-color); }
+    50% { color: var(--jailer-end-color); text-shadow: 0 0 15px #ffa500; }
+}
+@keyframes heatRipple {
+    0%, 100% { transform: scale(1); opacity: 0.1; }
+    50% { transform: scale(1.05); opacity: 0.3; }
+}
+
+/* Noxx: Opacity wave / Illusion shift */
+@keyframes opacityWave {
+    0%, 100% { opacity: 0.7; }
     50% { opacity: 0.9; }
 }
+@keyframes illusionShift {
+    0%, 100% { opacity: 1; transform: translate(0); }
+    25% { opacity: 0.8; transform: translate(1px, -1px); }
+    75% { opacity: 1.2; transform: translate(-1px, 1px); }
+}
 
-.countless-card {
-    border: 2px solid var(--money-green);
-    box-shadow: 0 0 12px var(--money-green);
+/* Countless: Opacity shift / Fragmentation pulse */
+@keyframes phaseShift {
+    0%, 100% { opacity: 0.8; }
+    50% { opacity: 1; }
 }
-.countless-card::before {
-    content: '$$$$$'; /* UPDATED: 5 symbols */
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%); /* Center the large symbol */
-    width: 100%;
-    height: 100%;
-    font-size: 6rem; /* ADJUSTED: Reduced size to fit 5 symbols */
-    line-height: 1;
-    color: var(--money-green);
-    text-shadow: 0 0 30px var(--money-green);
-    animation: fastFlash 0.05s infinite alternate; /* Very aggressive flash */
-    pointer-events: none;
-    z-index: 0;
-    font-family: Arial, sans-serif;
+@keyframes fragmentPulse {
+    0%, 100% { transform: translateX(0); }
+    5% { transform: skewX(1deg); filter: blur(0.5px); }
+    10% { transform: skewX(-1deg); filter: blur(0); }
 }
-.countless-card::after {
-    /* Overriding default after for solid color */
+
+/* --- GLOBAL MANAZ HOVER EFFECT (NEW) --- */
+body.manaz-hover {
+    /* Screen Ripples - Distortion spreads */
+    animation: voidRippleFilter 1.5s ease-in-out infinite alternate;
+    /* Custom Cursor (Violet) */
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewport="0 0 100 100" style="fill:black;font-size:16px;"><circle cx="16" cy="16" r="10" fill="#5d00ff" opacity="0.6"><animate attributeName="r" values="10;12;10" dur="0.8s" repeatCount="indefinite"/></circle></svg>') 16 16, default;
+}
+
+
+/* --- MEMBER TEXT THEME STYLES (REPLACEMENT) --- */
+
+/* 1. ManaZ - The Voidborne Sovereign (NEW EFFECTS) */
+.manaz-card {
+    /* Base: matte black background */
+    background: var(--dark-bg);
+    border: 1px solid rgba(93, 0, 255, 0.2);
+    box-shadow: 0 0 10px rgba(93, 0, 255, 0.3);
+    transition: all 0.5s ease;
+}
+
+/* Idle Glitch Flicker */
+.manaz-card .member-name {
+    color: var(--text-primary);
+    text-shadow: 0 0 5px var(--manaz-start-color), 0 0 15px rgba(93, 0, 255, 0.5);
+    animation: glitchFlicker 10s infinite steps(1); /* Slower, more subtle */
+    transition: transform 0.3s ease, text-shadow 0.5s;
+}
+
+/* Void Pulse ::before element (Hidden by default) */
+.manaz-card::before {
     content: '';
     position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 3px;
-    background: var(--money-green);
-}
-.countless-card .member-role { color: var(--money-green); }
-
-/* 7. Yeteu - Yeti Effect (Frozen Crystal) */
-@keyframes iceShimmer {
-    from { background-position: 0% 0%; }
-    to { background-position: 100% 100%; }
-}
-.yeteu-card {
-    border: 2px solid var(--yeti-blue);
-    box-shadow: 0 0 20px rgba(160, 224, 255, 0.8), inset 0 0 10px rgba(255, 255, 255, 0.3);
-    /* Frosted/Crystal texture */
-    background: repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.05) 0, rgba(255, 255, 255, 0.05) 1px, transparent 2px, transparent 10px);
-    background-size: 40px 40px;
-    animation: iceShimmer 30s linear infinite;
-}
-.yeteu-card .member-role { color: var(--yeti-blue); text-shadow: 0 0 5px var(--yeti-blue); }
-
-/* --- NEW CLICK EFFECT CLASSES AND KEYFRAMES --- */
-@keyframes electricShock {
-    0%, 100% { transform: scale(1); box-shadow: 0 0 15px var(--electric-yellow); }
-    50% { transform: scale(1.05); box-shadow: 0 0 40px var(--electric-yellow); }
-}
-
-@keyframes coinPop {
-    0% { opacity: 1; transform: translateY(0) scale(1); }
-    100% { opacity: 0; transform: translateY(-50px) scale(0.5) translateX(calc(var(--rand-x) * 1px)); }
-}
-/* This class is used by ManaZ and JurryDegree */
-.shocked {
-    animation: electricShock 0.1s ease-out 2;
-}
-/* This class is used by OniJailer */
-.onifire {
-    background: radial-gradient(circle at center, #ff8c00 0%, #ff4500 50%, rgba(30, 30, 30, 0.9) 100%) !important;
-    transition: background 0.1s;
-}
-/* This class is used by Yeteu */
-.yeteu-frost {
-    filter: blur(2px) brightness(1.2);
-    transition: filter 0.2s;
-}
-
-/* For InfiniteIntensity Gold Trail */
-.gold-trail-particle {
-    position: fixed;
-    width: 5px;
-    height: 5px;
-    background: var(--infinity-gold);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    width: 100px; height: 100px;
     border-radius: 50%;
-    box-shadow: 0 0 5px var(--infinity-gold);
+    background: var(--void-pulse);
     pointer-events: none;
-    animation: coinPop 0.5s ease-out forwards;
-    z-index: 9999;
+    z-index: 0;
+    opacity: 0;
 }
 
+/* Hover: The Real Show */
+.manaz-card:hover {
+    transform: translateY(-5px); /* Lift */
+    box-shadow: 0 0 30px rgba(93, 0, 255, 0.8), 0 10px 40px rgba(93, 0, 255, 0.5); /* Surge */
+}
+
+/* Text Fracture and Reconstruction (on hover) */
+.manaz-card:hover .member-name {
+    animation: textFracture 0.5s ease-in-out 1 forwards;
+    text-shadow: 0 0 10px #ffffff, 0 0 25px var(--manaz-start-color);
+}
+
+/* Void Pulse (on hover) */
+.manaz-card:hover::before {
+    animation: voidPulseExpand 0.7s ease-out 1; /* Run once on hover */
+}
+
+
+/* 2. InfiniteIntensity - The Relentless Reactor */
+.intensity-card {
+    border-color: var(--intensity-start-color);
+    /* Background blur faintly expands and contracts */
+    box-shadow: 0 0 15px rgba(0, 255, 247, 0.5);
+    transition: box-shadow 0.5s ease-in-out;
+}
+.intensity-card .member-name {
+    /* Cyan plasma -> neon green gradient */
+    background: linear-gradient(90deg, var(--intensity-start-color), var(--intensity-end-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    /* Dynamic vibration + Electric pulse lines sweep horizontally */
+    background-image: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5) 50%, transparent);
+    background-size: 200% 100%;
+    animation: electricSweep 2s linear infinite, dynamicVibrate 0.05s linear infinite;
+}
+.intensity-card:hover .member-name {
+    /* Energy surge flash races through text (faster sweep) */
+    animation: electricSweep 0.2s linear infinite, dynamicVibrate 0.05s linear infinite;
+    text-shadow: 0 0 10px var(--intensity-end-color), 0 0 20px var(--intensity-start-color);
+}
+
+
+/* 3. Yeteu - The Neural Strategist */
+.yeteu-card {
+    background: rgba(10, 10, 20, 0.8);
+    /* Micro flicker distortion on card */
+    animation: microFlicker 0.1s infinite alternate;
+}
+.yeteu-card .member-name {
+    color: var(--yeteu-end-color);
+    text-shadow: 0 0 5px var(--yeteu-start-color);
+    /* Randomized data glitch lines */
+    animation: dataGlitch 5s infinite steps(20);
+    transition: all 0.1s;
+}
+.yeteu-card:hover .member-name {
+    /* Text temporarily duplicates, overlaps by 1-2px */
+    text-shadow: 2px 2px 0 var(--yeteu-start-color), -2px -2px 0 var(--yeteu-end-color);
+    transform: translateX(1px);
+}
+.yeteu-card .member-name::after {
+    /* Vertical code stream on hover */
+    content: '0101100101001010';
+    position: absolute;
+    bottom: 0; right: 0;
+    font-size: 0.8rem;
+    color: rgba(0, 200, 255, 0.5);
+    opacity: 0;
+    transition: opacity 0.5s;
+    pointer-events: none;
+    line-height: 1;
+    overflow: hidden;
+    transform: translateY(100%);
+}
+.yeteu-card:hover .member-name::after {
+    opacity: 1;
+    transform: translateY(-100%);
+    transition: transform 0.5s linear, opacity 0.2s;
+}
+
+/* 4. JurryDegree - The Iron Sentinel */
+.degree-card {
+    border-color: var(--degree-end-color);
+    /* Polished steel texture */
+    background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.1) 25%, transparent 25%, transparent 75%, rgba(255, 255, 255, 0.1) 75%, rgba(255, 255, 255, 0.1));
+    background-size: 20px 20px;
+}
+.degree-card .member-name {
+    /* Polished steel with an electric blue edge */
+    color: var(--degree-start-color);
+    text-shadow: 0 0 2px var(--degree-end-color);
+    /* Crisp linear shine sliding diagonally across text */
+    background-image: linear-gradient(45deg, transparent 40%, rgba(255, 255, 255, 0.8) 50%, transparent 60%);
+    background-size: 200% 200%;
+    animation: linearShine 8s linear infinite;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: var(--degree-start-color);
+    background-clip: text;
+}
+.degree-card:hover {
+    /* Shockwave pulse expands outward (via box-shadow) */
+    box-shadow: 0 0 10px var(--degree-end-color), 0 0 30px var(--degree-end-color);
+    /* Slight letter "impact shake" */
+    animation: dynamicVibrate 0.1s linear 3;
+}
+
+/* 5. OniJailer - The Crimson Warden */
+.jailer-card {
+    /* Heat distortion ripple (subtle wave effect behind the name) */
+    background: radial-gradient(circle at bottom, var(--jailer-start-color) 0%, rgba(20, 20, 20, 0.8) 70%);
+    position: relative;
+    overflow: visible; /* Allows the after element to be seen */
+}
+.jailer-card .member-name {
+    /* Blood red -> burnt ember gradient + Slow ember pulse */
+    color: var(--jailer-start-color);
+    text-shadow: 0 0 5px var(--jailer-start-color);
+    animation: emberPulse 4s ease-in-out infinite alternate;
+}
+/* Visual element for heat distortion ripple */
+.jailer-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: -1;
+    background: radial-gradient(circle at bottom, rgba(255, 69, 0, 0.3) 0%, transparent 70%);
+    animation: heatRipple 3s ease-in-out infinite alternate;
+    pointer-events: none;
+}
+.jailer-card:hover .member-name {
+    /* Text briefly shakes violently as if roaring */
+    animation: dynamicVibrate 0.05s linear 6;
+}
+.jailer-card:hover::after {
+    /* Chains fade in and wrap (simulated with gradient) */
+    content: '';
+    position: absolute;
+    top: 50%; left: 0; right: 0;
+    height: 1px;
+    background: repeating-linear-gradient(90deg, #ff8c00 0, #ff8c00 3px, transparent 3px, transparent 10px);
+    opacity: 1;
+    transform: translateY(-50%) scaleX(1.1);
+    transition: opacity 0.1s, transform 0.1s;
+}
+
+/* 6. Noxx - The Shadow Coder */
+.noxx-card {
+    background: var(--noxx-start-color);
+    border-color: var(--noxx-end-color);
+    box-shadow: 0 0 10px var(--noxx-end-color);
+    /* Blur pulse: sharpens and blurs rhythmically */
+    filter: drop-shadow(0 0 5px var(--noxx-end-color));
+    transition: filter 0.5s;
+}
+.noxx-card .member-name {
+    /* Deep black core with faint violet edge glow */
+    color: var(--noxx-start-color);
+    text-shadow: 0 0 5px var(--noxx-end-color);
+    /* Opacity wave */
+    animation: opacityWave 5s infinite alternate;
+    transition: all 0.2s;
+}
+.noxx-card:hover .member-name {
+    /* Text fades out, reappears slightly offset (illusion) */
+    animation: illusionShift 0.1s ease-out 5 alternate;
+    color: var(--text-primary); /* Make text visible on hover */
+    text-shadow: 0 0 10px var(--noxx-end-color), 0 0 20px rgba(122, 0, 255, 0.5);
+}
+
+/* 7. Countless - The Fractured One */
+.countless-card {
+    /* Pale ghostly aura, softly diffused */
+    box-shadow: 0 0 10px rgba(51, 255, 255, 0.5);
+    /* Background for depth */
+    background: radial-gradient(circle at center, rgba(51, 255, 255, 0.1) 0%, rgba(20, 20, 20, 0.8) 70%);
+}
+.countless-card .member-name {
+    /* White -> cyan gradient */
+    background: linear-gradient(90deg, var(--countless-start-color), var(--countless-end-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    /* Constant opacity shift between 80% and 100% */
+    animation: phaseShift 3s infinite alternate, fragmentPulse 10s linear infinite;
+}
+.countless-card:hover .member-name {
+    /* Text splits into three transparent clones that trail and merge back (simulated with shadow) */
+    text-shadow: 3px 3px 0 rgba(51, 255, 255, 0.4), -3px -3px 0 rgba(255, 255, 255, 0.4);
+    transition: text-shadow 0.1s;
+}
 
 /* Generic hover cleanup to not clash with custom effects */
 .member-card:hover {
     transform: translateY(-5px); /* Slightly more emphasis on lift */
     background: rgba(30, 30, 30, 0.9);
 }
-/* Re-enable default after transition if custom one wasn't used */
-.member-card:not(.jailer-card):not(.countless-card):hover::after {
-    transform: scaleX(1);
+/* Ensure the default after transition is overridden/removed if not needed */
+.member-card::after {
+    display: none; /* Hide default bottom bar unless explicitly used by a member effect */
 }
+
 
 /* About Section */
 .about-content {
@@ -1368,107 +1476,19 @@ particle.style.boxShadow = '';
 }, 100);
 }
 
-// --- NEW CLICK EFFECTS LOGIC ---
+// --- MANAZ GLOBAL HOVER LOGIC ---
+const manazCard = document.querySelector('.manaz-card');
+const body = document.body;
 
-// New function for creating gold trail particles (used by InfiniteIntensity)
-function createGoldParticle(x, y) {
-    const p = document.createElement('div');
-    p.classList.add('gold-trail-particle');
-    // Randomize position slightly for a shower effect
-    p.style.left = `${x + (Math.random() - 0.5) * 50}px`;
-    p.style.top = `${y + (Math.random() - 0.5) * 50}px`;
-    // Randomize duration and delay
-    p.style.animationDuration = `${0.3 + Math.random() * 0.4}s`;
-    document.body.appendChild(p);
-
-    // Remove the element after the animation is finished
-    p.addEventListener('animationend', () => p.remove());
-}
-
-// Function to handle the specific effects of each card on click
-function handleMemberClick(card) {
-    // Get the base name from the first class name that ends with '-card'
-    const nameClass = Array.from(card.classList).find(cls => cls.endsWith('-card'));
-    if (!nameClass) return; // Exit if no member class found
-
-    const memberName = nameClass.replace('-card', '');
-    const rect = card.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-    
-    // DEBUG: Confirm the click is registering in JavaScript
-    console.log(`[VOIDSTEEL CLICK DEBUG] Event registered for: ${memberName}`);
-
-    // Store original transition (which is 'all 0.3s ease' from CSS)
-    const originalTransition = card.style.transition;
-
-    // --- UNIVERSAL CLICK PRESS DOWN EFFECT ---
-    // Ensure the transform is applied immediately by removing transition
-    card.style.transition = 'none'; 
-    card.style.transform = 'scale(0.98)';
-    
-    // Restore transition and normal scale after 100ms
-    setTimeout(() => {
-        card.style.transform = ''; // Removes the scale(0.98)
-        card.style.transition = originalTransition; // Restores the default 0.3s ease
-    }, 100);
-    // --- END UNIVERSAL CLICK PRESS DOWN EFFECT ---
-
-    switch (memberName) {
-        case 'manaz':
-            // ManaZ (Leader): Ultimate/Cyber-Access
-            card.classList.add('shocked');
-            setTimeout(() => card.classList.remove('shocked'), 400);
-            showStatus('🔑 VOIDSTEEL: ACCESS GRANTED. PRIME DIRECTIVE RECEIVED.', false);
-            break;
-        case 'degree':
-            // JurryDegree (Electric): Electric Shock
-            card.classList.add('shocked');
-            setTimeout(() => card.classList.remove('shocked'), 400);
-            showStatus('⚡ ELECTRIC FIELD RECALIBRATED.', false);
-            break;
-        case 'intensity':
-            // InfiniteIntensity (Infinity/Gold): Gold Particle Explosion/Trail
-            for (let i = 0; i < 20; i++) {
-                createGoldParticle(centerX, centerY);
-            }
-            showStatus('✨ INFINITE RESOURCES MANIFESTED.', false);
-            break;
-        case 'countless':
-            // Countless (Money): Aggressive flash / Money Spawn
-            showStatus('💰 TRANSACTION COMPLETE. FUNDS ACQUIRED.');
-            break;
-        case 'jailer':
-            // OniJailer (Fire): Fire Burst
-            card.classList.add('onifire');
-            setTimeout(() => card.classList.remove('onifire'), 300);
-            showStatus('🔥 PURGING THE VOID OF IMPURITIES.');
-            break;
-        case 'noxx':
-            // Noxx (Dragon/Scales): Mystic Code Decryption
-            card.style.opacity = '0.5';
-            setTimeout(() => card.style.opacity = '1', 50);
-            showStatus('🐉 ANCIENT CODE DECRYPTED. KNOWLEDGE UNLOCKED.', false);
-            break;
-        case 'yeteu':
-            // Yeteu (Yeti/Ice): Frost/Ice Burst
-            card.classList.add('yeteu-frost');
-            setTimeout(() => card.classList.remove('yeteu-frost'), 300);
-            showStatus('❄️ SUB-ZERO PROTOCOL ACTIVATED.');
-            break;
-    }
-}
-
-// Attach event listeners to all member cards
-document.querySelectorAll('.member-card').forEach(card => {
-    card.addEventListener('click', (e) => {
-        // Prevent default navigation/form submission if this was a link/button
-        e.preventDefault();
-        
-        // Pass the clicked card element to the handler
-        handleMemberClick(e.currentTarget);
+if (manazCard) {
+    // Adds the global body class for Screen Ripples and Cursor Delay
+    manazCard.addEventListener('mouseenter', () => {
+        body.classList.add('manaz-hover');
     });
-});
+    manazCard.addEventListener('mouseleave', () => {
+        body.classList.remove('manaz-hover');
+    });
+}
 </script>
 </body>
 </html>
