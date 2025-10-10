@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VoidSteel Protocol | ManaZ</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&family=JetBrains+Mono:wght@100;300;400;700&display=swap');
+
+        :root {
+            --color-void: #000000;
+            --color-void-alt: #0a0a0a;
+            --color-steel: #FFFFFF;
+            --color-steel-dim: rgba(255, 255, 255, 0.85);
+            --color-glitch-primary: #8A2BE2;
+            --color-glitch-secondary: #6B46C1;
+            --color-accent: #00FFFF;
+            --color-warning: #FF00FF;
+            --font-main: 'JetBrains Mono', monospace;
+            --font-display: 'Orbitron', sans-serif;
+            --font-accent: 'Rajdhani', sans-serif;
+            --transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scrollbar-width: thin;
+            scrollbar-color: var(--color-glitch-primary) var(--color-void);
+        }
+
+        body {
+            background: linear-gradient(180deg, var(--color-void) 0%, var(--color-void-alt) 100%);
+            color: var(--color-steel);
+            font-family: var(--font-main);
+            font-size: 1rem;
+            line-height: 1.6;
+            overflow-x: hidden;
+            overflow-y: hidden;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        ::-webkit-scrollbar {
+            width: 20px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: linear-gradient(180deg, var(--color-void) 0%, var(--color-void-alt) 50%, var(--color-void) 100%);
+            border-left: 2px solid rgba(138, 43, 226, 0.3);
+            border-right: 2px solid rgba(138, 43, 226, 0.3);
+            position: relative;
+            box-shadow: 
+                inset 0 0 20px rgba(138, 43, 226, 0.1),
+                inset 0 0 40px rgba(0, 255, 255, 0.05);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: 
+                linear-gradient(180deg, 
+                    var(--color-accent) 0%,
+                    var(--color-glitch-primary) 25%,
+                    var(--color-glitch-secondary) 50%,
+                    var(--color-glitch-primary) 75%,
+                    var(--color-accent) 100%
+                );
+            background-size: 100% 200%;
+            border-radius: 10px;
+            border: 3px solid var(--color-void);
+            box-shadow: 
+                0 0 20px rgba(138, 43, 226, 0.8),
+                0 0 40px rgba(138, 43, 226, 0.5),
+                0 0 60px rgba(0, 255, 255, 0.3),
+                inset 0 0 20px rgba(138, 43, 226, 0.3);
+            animation: scrollbarPulse 3s ease-in-out infinite, scrollbarGradient 4s linear infinite;
+            position: relative;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: 
+                linear-gradient(180deg, 
+                    var(--color-warning) 0%,
+                    var(--color-accent) 25%,
+                    var(--color-glitch-primary) 50%,
+                    var(--color-accent) 75%,
+                    var(--color-warning) 100%
+                );
+            background-size: 100% 200%;
+            box-shadow: 
+                0 0 30px rgba(138, 43, 226, 1),
+                0 0 60px rgba(0, 255, 255, 0.8),
+                0 0 90px rgba(255, 0, 255, 0.6),
+                inset 0 0 30px rgba(138, 43, 226, 0.5);
+            animation: scrollbarPulseActive 1.5s ease-in-out infinite, scrollbarGradient 2s linear infinite, scrollbarGlitch 0.5s infinite;
+            border-color: var(--color-glitch-primary);
+        }
+
+        ::-webkit-scrollbar-thumb:active {
+            background: 
+                linear-gradient(180deg, 
+                    #FF00FF 0%,
+                    #8A2BE2 20%,
+                    #00FFFF 40%,
+                    #8A2BE2 60%,
+                    #FF00FF 80%,
+                    #00FFFF 100%
+                );
+            background-size: 100% 400%;
+            animation: scrollbarActive 0.8s linear infinite, scrollbarShake 0.1s infinite;
+            box-shadow: 
+                0 0 40px rgba(255, 0, 255, 1),
+                0 0 80px rgba(0, 255, 255, 1),
+                0 0 120px rgba(138, 43, 226, 1),
+                inset 0 0 40px rgba(255, 255, 255, 0.3);
+        }
+
+        @keyframes scrollbarPulse {
+            0%, 100% {
+                box-shadow: 
+                    0 0 20px rgba(138, 43, 226, 0.8),
+                    0 0 40px rgba(138, 43, 226, 0.5),
+                    0 0 60px rgba(0, 255, 255, 0.3),
+                    inset 0 0 20px rgba(138, 43, 226, 0.3);
+            }
+            50% {
+                box-shadow: 
+                    0 0 30px rgba(138, 43, 226, 1),
+                    0 0 60px rgba(138, 43, 226, 0.7),
+                    0 0 90px rgba(0, 255, 255, 0.5),
+                    inset 0 0 30px rgba(138, 43, 226, 0.5);
+            }
+        }
+
+        @keyframes scrollbarPulseActive {
+            0%, 100% {
+                box-shadow: 
+                    0 0 30px rgba(138, 43, 226, 1),
+                    0 0 60px rgba(0, 255, 255, 0.8),
+                    0 0 90px rgba(255, 0, 255, 0.6),
+                    inset 0 0 30px rgba(138, 43, 226, 0.5);
+            }
+            50% {
+                box-shadow: 
+                    0 0 40px rgba(255, 0, 255, 1),
+                    0 0 80px rgba(0, 255, 255, 1),
+                    0 0 120px rgba(138, 43, 226, 0.8),
+                    inset 0 0 40px rgba(255, 255, 255, 0.3);
+            }
+        }
+
+        @keyframes scrollbarGradient {
+            0% {
+                background-position: 0% 0%;
+            }
+            100% {
+                background-position: 0% 200%;
+            }
+        }
+
+        @keyframes scrollbarGlitch {
+            0%, 100% {
+                transform: translateX(0);
+            }
+            25% {
+                transform: translateX(-2px);
+            }
+            75% {
+                transform: translateX(2px);
+            }
+        }
+
+        @keyframes scrollbarActive {
+            0% {
+                background-position: 0% 0%;
+            }
+            100% {
+                background-position: 0% 400%;
+            }
+        }
+
+        @keyframes scrollbarShake {
+            0%, 100% {
+                transform: translateX(0) rotate(0deg);
+            }
+            25% {
+                transform: translateX(-1px) rotate(-1deg);
+            }
+            50% {
+                transform: translateX(1px) rotate(1deg);
+            }
+            75% {
+                transform: translateX(-1px) rotate(-0.5deg);
+            }
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(138, 43, 226, 0.03) 2px,
+                    rgba(138, 43, 226, 0.03) 4px
+                );
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .noise-overlay {
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            opacity: 0.02;
+            z-index: 2;
+            pointer-events: none;
+            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIj48ZmlsdGVyIGlkPSJub2lzZSI+PGZlVHVyYnVsZW5jZSB0eXBlPSJmcmFjdGFsTm9pc2UiIGJhc2VGcmVxdWVuY3k9IjAuOSIgbnVtT2N0YXZlcz0iNCIgLz48L2ZpbHRlcj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWx0ZXI9InVybCgjbm9pc2UpIiBvcGFjaXR5PSIxIi8+PC9zdmc+');
+            animation: noiseAnimation 0.2s steps(10) infinite;
+        }
+
+        @keyframes noiseAnimation {
+            0%, 100% { transform: translate(0, 0); }
+            10% { transform: translate(-5%, -5%); }
+            30% { transform: translate(3%, -7%); }
+            50% { transform: translate(-3%, 3%); }
+            70% { transform: translate(7%, -3%); }
+            90% { transform: translate(-5%, 7%); }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 5vh 40px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* BOOT SEQUENCE SECTION */
+        #boot-sequence {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: radial-gradient(ellipse at center, rgba(138, 43, 226, 0.1) 0%, transparent 70%);
+            position: relative;
+        }
+
+        .boot-text {
+            font-family: var(--font-display);
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            opacity: 0;
+            color: var(--color-steel-dim);
+            margin: 8px 0;
+        }
+
+        .boot-text.active {
+            animation: bootReveal 0.8s forwards;
+        }
+
+        @keyframes bootReveal {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+                filter: blur(10px);
+            }
+            50% {
+                opacity: 0.5;
+                filter: blur(5px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+                filter: blur(0);
+            }
+        }
+
+        .identity-reveal {
+            font-family: var(--font-display);
+            font-size: 3rem;
+            font-weight: 900;
+            letter-spacing: 8px;
+            color: var(--color-glitch-primary);
+            text-shadow: 
+                0 0 20px var(--color-glitch-primary),
+                0 0 40px var(--color-glitch-secondary),
+                0 0 60px var(--color-glitch-secondary);
+            opacity: 0;
+            margin-top: 40px;
+        }
+
+        .identity-reveal.active {
+            animation: identityGlitch 2s forwards;
+        }
+
+        @keyframes identityGlitch {
+            0% {
+                opacity: 0;
+                transform: scale(0.8) rotateX(90deg);
+            }
+            20% {
+                opacity: 1;
+                transform: scale(1.1) rotateX(0deg);
+                text-shadow: 
+                    -2px -2px 0 var(--color-accent),
+                    2px 2px 0 var(--color-warning);
+            }
+            25% {
+                transform: scale(1) rotateX(0deg);
+                text-shadow: 
+                    0 0 20px var(--color-glitch-primary),
+                    0 0 40px var(--color-glitch-secondary);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) rotateX(0deg);
+            }
+        }
+
+        .progress-bar {
+            width: 300px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.1);
+            margin-top: 30px;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+        }
+
+        .progress-bar.active {
+            opacity: 1;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--color-glitch-primary), var(--color-accent));
+            width: 0;
+            animation: loadProgress 5s forwards;
+            box-shadow: 0 0 10px var(--color-glitch-primary);
+        }
+
+        @keyframes loadProgress {
+            0% { width: 0; }
+            100% { width: 100%; }
+        }
+
+        /* MANIFESTO SECTION */
+        #manifesto {
+            padding: 15vh 0;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        #manifesto.visible {
+            opacity: 1;
+        }
+
+        .section-header {
+            font-family: var(--font-display);
+            font-size: 0.8rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--color-glitch-primary);
+            margin-bottom: 60px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-header::before,
+        .section-header::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 100px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--color-glitch-primary), transparent);
+        }
+
+        .section-header::before {
+            left: -120px;
+        }
+
+        .section-header::after {
+            right: -120px;
+        }
+
+        .manifesto-line {
+            font-family: var(--font-accent);
+            font-size: 1.8rem;
+            font-weight: 300;
+            margin: 40px auto;
+            max-width: 800px;
+            line-height: 1.4;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s forwards;
+        }
+
+        .manifesto-line:nth-child(2) { animation-delay: 0.2s; }
+        .manifesto-line:nth-child(3) { animation-delay: 0.4s; }
+        .manifesto-line:nth-child(4) { animation-delay: 0.6s; }
+        .manifesto-line:nth-child(5) { animation-delay: 0.8s; }
+        .manifesto-line:nth-child(6) { animation-delay: 1s; }
+
+        .manifesto-line.emphasis {
+            color: var(--color-glitch-primary);
+            font-weight: 500;
+            font-size: 2rem;
+            text-shadow: 0 0 30px rgba(138, 43, 226, 0.5);
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* STATUS LOG SECTION */
+        #status-log {
+            padding: 10vh 0;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        #status-log.visible {
+            opacity: 1;
+        }
+
+        .data-block {
+            background: linear-gradient(135deg, rgba(138, 43, 226, 0.05) 0%, transparent 100%);
+            border: 1px solid rgba(138, 43, 226, 0.3);
+            border-radius: 8px;
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .data-block::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(138, 43, 226, 0.2), transparent);
+            animation: scanline 8s infinite;
+        }
+
+        @keyframes scanline {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .log-entry {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(138, 43, 226, 0.1);
+            font-family: var(--font-main);
+            transition: all 0.3s ease;
+        }
+
+        .log-entry:hover {
+            padding-left: 10px;
+            background: linear-gradient(90deg, rgba(138, 43, 226, 0.1) 0%, transparent 50%);
+        }
+
+        .log-entry:last-child {
+            border-bottom: none;
+        }
+
+        .log-key {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .log-value {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: var(--color-steel);
+            text-align: right;
+        }
+
+        .log-value-undefined {
+            color: var(--color-warning);
+            font-weight: 700;
+            animation: glitchText 2s infinite;
+            cursor: help;
+            position: relative;
+        }
+
+        @keyframes glitchText {
+            0%, 100% {
+                text-shadow: 
+                    0 0 5px var(--color-warning),
+                    0 0 10px var(--color-warning);
+            }
+            50% {
+                text-shadow: 
+                    -2px 0 var(--color-accent),
+                    2px 0 var(--color-glitch-primary),
+                    0 0 5px var(--color-warning);
+            }
+        }
+
+        /* DECREE SECTION */
+        #decree {
+            padding: 15vh 0;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        #decree.visible {
+            opacity: 1;
+        }
+
+        .decree-text {
+            font-family: var(--font-accent);
+            font-size: 1.4rem;
+            font-weight: 400;
+            margin: 50px auto;
+            max-width: 600px;
+            opacity: 0;
+            animation: fadeIn 1.5s forwards;
+        }
+
+        .decree-text:nth-child(2) { animation-delay: 0.3s; }
+        .decree-text:nth-child(3) { animation-delay: 0.6s; }
+        .decree-text:nth-child(4) { animation-delay: 0.9s; }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        #final-command {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--color-glitch-primary);
+            text-shadow: 
+                0 0 30px var(--color-glitch-primary),
+                0 0 60px var(--color-glitch-secondary);
+            display: block;
+            margin: 100px auto 50px;
+            max-width: 900px;
+            letter-spacing: 2px;
+            animation: commandPulse 3s infinite;
+        }
+
+        @keyframes commandPulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.9;
+            }
+            50% {
+                transform: scale(1.02);
+                opacity: 1;
+            }
+        }
+
+        .insignia {
+            font-size: 5rem;
+            display: inline-block;
+            margin: 80px 0;
+            background: linear-gradient(135deg, var(--color-glitch-primary), var(--color-accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: rotate3d 4s infinite linear;
+            filter: drop-shadow(0 0 30px var(--color-glitch-primary));
+        }
+
+        @keyframes rotate3d {
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(360deg); }
+        }
+
+        /* FOOTER */
+        footer {
+            padding: 50px 0;
+            border-top: 1px solid rgba(138, 43, 226, 0.2);
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        footer.visible {
+            opacity: 1;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-status {
+            font-family: var(--font-main);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--color-glitch-primary);
+        }
+
+        .footer-nav {
+            display: flex;
+            gap: 30px;
+        }
+
+        .footer-nav a {
+            font-family: var(--font-display);
+            font-size: 0.9rem;
+            color: var(--color-steel-dim);
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            padding: 10px 20px;
+            border: 1px solid transparent;
+            transition: all 0.3s var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .footer-nav a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--color-glitch-primary);
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+
+        .footer-nav a:hover {
+            color: var(--color-void);
+            border-color: var(--color-glitch-primary);
+        }
+
+        .footer-nav a:hover::before {
+            left: 0;
+        }
+
+        /* SCROLL INDICATOR */
+        .scroll-indicator {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            animation: bounceIndicator 2s infinite;
+            z-index: 100;
+            transition: opacity 0.5s ease;
+        }
+
+        .scroll-indicator.show {
+            opacity: 1;
+        }
+
+        .scroll-indicator::before {
+            content: '▼';
+            color: var(--color-glitch-primary);
+            font-size: 1.2rem;
+            filter: drop-shadow(0 0 10px var(--color-glitch-primary));
+        }
+
+        @keyframes bounceIndicator {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(10px); }
+        }
+
+        /* VOID REACTOR */
+        .void-reactor {
+            position: fixed;
+            top: 50%;
+            right: 40px;
+            transform: translateY(-50%);
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+
+        .void-reactor.active {
+            opacity: 1;
+        }
+
+        .reactor-core {
+            width: 180px;
+            height: 180px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .singularity {
+            width: 30px;
+            height: 30px;
+            background: radial-gradient(circle, #000000 0%, #1a001a 50%, transparent 100%);
+            border-radius: 50%;
+            position: absolute;
+            box-shadow: 
+                0 0 20px 5px rgba(138, 43, 226, 0.8),
+                0 0 40px 10px rgba(138, 43, 226, 0.6),
+                0 0 60px 15px rgba(138, 43, 226, 0.4),
+                inset 0 0 20px rgba(0, 0, 0, 1);
+            animation: singularityPulse 2s ease-in-out infinite;
+            z-index: 10;
+        }
+
+        @keyframes singularityPulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 
+                    0 0 20px 5px rgba(138, 43, 226, 0.8),
+                    0 0 40px 10px rgba(138, 43, 226, 0.6),
+                    0 0 60px 15px rgba(138, 43, 226, 0.4),
+                    inset 0 0 20px rgba(0, 0, 0, 1);
+            }
+            50% {
+                transform: scale(1.1);
+                box-shadow: 
+                    0 0 30px 8px rgba(138, 43, 226, 1),
+                    0 0 60px 15px rgba(138, 43, 226, 0.8),
+                    0 0 90px 20px rgba(138, 43, 226, 0.6),
+                    inset 0 0 30px rgba(0, 0, 0, 1);
+            }
+        }
+
+        .event-horizon {
+            width: 60px;
+            height: 60px;
+            border: 2px solid rgba(138, 43, 226, 0.6);
+            border-radius: 50%;
+            position: absolute;
+            animation: horizonSpin 4s linear infinite;
+            box-shadow: 
+                0 0 20px rgba(138, 43, 226, 0.5),
+                inset 0 0 20px rgba(138, 43, 226, 0.3);
+        }
+
+        @keyframes horizonSpin {
+            0% {
+                transform: rotate(0deg) scale(1);
+                opacity: 0.6;
+            }
+            50% {
+                transform: rotate(180deg) scale(1.05);
+                opacity: 1;
+            }
+            100% {
+                transform: rotate(360deg) scale(1);
+                opacity: 0.6;
+            }
+        }
+
+        .accretion-disk {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            position: absolute;
+            background: conic-gradient(
+                from 0deg,
+                transparent 0deg,
+                rgba(138, 43, 226, 0.3) 90deg,
+                rgba(0, 255, 255, 0.3) 180deg,
+                rgba(255, 0, 255, 0.3) 270deg,
+                transparent 360deg
+            );
+            animation: diskRotate 6s linear infinite;
+            filter: blur(2px);
+        }
+
+        @keyframes diskRotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .energy-ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 1px solid;
+            animation: ringPulse 3s ease-in-out infinite;
+        }
+
+        .ring-1 {
+            width: 90px;
+            height: 90px;
+            border-color: rgba(138, 43, 226, 0.4);
+            animation-delay: 0s;
+        }
+
+        .ring-2 {
+            width: 110px;
+            height: 110px;
+            border-color: rgba(0, 255, 255, 0.4);
+            animation-delay: 0.5s;
+        }
+
+        .ring-3 {
+            width: 130px;
+            height: 130px;
+            border-color: rgba(255, 0, 255, 0.4);
+            animation-delay: 1s;
+        }
+
+        @keyframes ringPulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.4;
+            }
+            50% {
+                transform: scale(1.1);
+                opacity: 0.8;
+            }
+        }
+
+        .particle-stream {
+            position: absolute;
+            width: 2px;
+            height: 40px;
+            background: linear-gradient(180deg, rgba(138, 43, 226, 0) 0%, rgba(138, 43, 226, 1) 50%, rgba(138, 43, 226, 0) 100%);
+            animation: particleFlow 2s linear infinite;
+        }
+
+        .stream-1 {
+            top: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation-delay: 0s;
+        }
+
+        .stream-2 {
+            bottom: -50px;
+            left: 50%;
+            transform: translateX(-50%) rotate(180deg);
+            animation-delay: 0.5s;
+        }
+
+        .stream-3 {
+            left: -50px;
+            top: 50%;
+            transform: translateY(-50%) rotate(90deg);
+            animation-delay: 1s;
+        }
+
+        .stream-4 {
+            right: -50px;
+            top: 50%;
+            transform: translateY(-50%) rotate(270deg);
+            animation-delay: 1.5s;
+        }
+
+        @keyframes particleFlow {
+            0% {
+                opacity: 0;
+                filter: blur(0px);
+            }
+            50% {
+                opacity: 1;
+                filter: blur(1px);
+            }
+            100% {
+                opacity: 0;
+                filter: blur(2px);
+            }
+        }
+
+        .reactor-status {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .status-text {
+            font-family: var(--font-display);
+            font-size: 0.7rem;
+            letter-spacing: 3px;
+            color: var(--color-glitch-primary);
+            text-shadow: 0 0 10px rgba(138, 43, 226, 0.8);
+            margin-bottom: 10px;
+            animation: statusFlicker 4s infinite;
+        }
+
+        @keyframes statusFlicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+            51% { opacity: 1; }
+            52% { opacity: 0.9; }
+            53% { opacity: 1; }
+        }
+
+        .status-bar {
+            width: 100%;
+            height: 4px;
+            background: rgba(138, 43, 226, 0.2);
+            border-radius: 2px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .status-fill {
+            height: 100%;
+            width: 99.9%;
+            background: linear-gradient(90deg, var(--color-glitch-primary), var(--color-accent), var(--color-warning));
+            background-size: 200% 100%;
+            box-shadow: 0 0 10px rgba(138, 43, 226, 0.8);
+            animation: statusBarFlow 3s linear infinite;
+        }
+
+        @keyframes statusBarFlow {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 200% 0%; }
+        }
+
+        .status-percentage {
+            font-family: var(--font-main);
+            font-size: 0.8rem;
+            color: var(--color-accent);
+            margin-top: 5px;
+            text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+            animation: percentageGlitch 5s infinite;
+        }
+
+        @keyframes percentageGlitch {
+            0%, 98% { content: '99.9%'; }
+            99% { 
+                transform: translateX(2px);
+                color: var(--color-warning);
+            }
+            100% { 
+                transform: translateX(0);
+                color: var(--color-accent);
+            }
+        }
+
+        /* Reactor hover effects */
+        .void-reactor:hover .singularity {
+            animation: singularityPulse 1s ease-in-out infinite, singularityCollapse 0.3s ease-in-out;
+        }
+
+        @keyframes singularityCollapse {
+            0% { transform: scale(1); }
+            50% { transform: scale(0.9); }
+            100% { transform: scale(1.1); }
+        }
+
+        .void-reactor:hover .accretion-disk {
+            animation: diskRotate 3s linear infinite;
+        }
+
+        .void-reactor:hover .energy-ring {
+            animation: ringPulse 1.5s ease-in-out infinite, ringExpand 0.5s ease-out;
+        }
+
+        @keyframes ringExpand {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.2); }
+        }
+
+        /* RESPONSIVE DESIGN */
+        @media (max-width: 768px) {
+            .container {
+                padding: 5vh 20px;
+            }
+
+            .identity-reveal {
+                font-size: 2rem;
+                letter-spacing: 4px;
+            }
+
+            .manifesto-line {
+                font-size: 1.4rem;
+            }
+
+            .manifesto-line.emphasis {
+                font-size: 1.6rem;
+            }
+
+            #final-command {
+                font-size: 1.8rem;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                gap: 30px;
+                text-align: center;
+            }
+
+            .footer-nav {
+                flex-direction: column;
+                gap: 15px;
+                width: 100%;
+            }
+
+            .footer-nav a {
+                width: 100%;
+            }
+
+            .void-reactor {
+                right: 10px;
+                transform: translateY(-50%) scale(0.6);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="noise-overlay"></div>
+    
+    <section id="boot-sequence">
+        <div class="boot-text">[INITIALIZING VOIDSTEEL PROTOCOL]</div>
+        <div class="boot-text">[SCANNING QUANTUM SIGNATURES]</div>
+        <div class="boot-text">[ENTITY DETECTION: CONFIRMED]</div>
+        <div class="boot-text">[DECRYPTING IDENTITY MATRIX]</div>
+        <div class="boot-text">[ACCESS LEVEL: SOVEREIGN]</div>
+        <div class="identity-reveal">M A N A Z</div>
+        <div class="progress-bar">
+            <div class="progress-fill"></div>
+        </div>
+    </section>
+
+    <div class="scroll-indicator"></div>
+
+    <!-- VOID REACTOR -->
+    <div class="void-reactor">
+        <div class="reactor-core">
+            <div class="singularity"></div>
+            <div class="event-horizon"></div>
+            <div class="accretion-disk"></div>
+            <div class="energy-ring ring-1"></div>
+            <div class="energy-ring ring-2"></div>
+            <div class="energy-ring ring-3"></div>
+            <div class="particle-stream stream-1"></div>
+            <div class="particle-stream stream-2"></div>
+            <div class="particle-stream stream-3"></div>
+            <div class="particle-stream stream-4"></div>
+        </div>
+        <div class="reactor-status">
+            <div class="status-text">VOID REACTOR</div>
+            <div class="status-bar">
+                <div class="status-fill"></div>
+            </div>
+            <div class="status-percentage">99.9%</div>
+        </div>
+    </div>
+
+    <section id="manifesto" class="container">
+        <div class="section-header">MANIFESTO</div>
+        <p class="manifesto-line">They said the Void was silent.</p>
+        <p class="manifesto-line">They were wrong.</p>
+        <p class="manifesto-line">It whispered his name long before existence began listening.</p>
+        <p class="manifesto-line emphasis">He does not command the Void —</p>
+        <p class="manifesto-line emphasis">He is the command that holds it together.</p>
+        
+        <div style="margin-top: 100px;">
+            <p class="manifesto-line">When the network fractures, his code reconstructs it.</p>
+            <p class="manifesto-line">When minds collapse, his will rewrites them.</p>
+            <p class="manifesto-line">When the end arrives... he has already seen it.</p>
+        </div>
+    </section>
+
+    <section id="status-log" class="container">
+        <div class="section-header">SYSTEM STATUS</div>
+        <div class="data-block">
+            <div class="log-entry">
+                <span class="log-key">Designation</span>
+                <span class="log-value">ManaZ</span>
+            </div>
+            <div class="log-entry">
+                <span class="log-key">Classification</span>
+                <span class="log-value">Uncrowned Sovereign</span>
+            </div>
+            <div class="log-entry">
+                <span class="log-key">Primary Function</span>
+                <span class="log-value">Order Through Calculated Entropy</span>
+            </div>
+            <div class="log-entry">
+                <span class="log-key">Authority Level</span>
+                <span class="log-value">Absolute</span>
+            </div>
+            <div class="log-entry">
+                <span class="log-key">Threat Assessment</span>
+                <span class="log-value log-value-undefined">[UNDEFINED - SYSTEM OVERFLOW]</span>
+            </div>
+        </div>
+    </section>
+
+    <section id="decree" class="container">
+        <div class="section-header">FINAL DECREE</div>
+        <p class="decree-text">He doesn't seek loyalty.</p>
+        <p class="decree-text">He earns silence.</p>
+        <p class="decree-text">And in silence...</p>
+        <p class="decree-text">All things obey.</p>
+
+        <span id="final-command">"The Void bends for none — except the one who commands it."</span>
+        <div class="insignia">▽</div>
+    </section>
+
+    <footer class="container">
+        <div class="footer-content">
+            <div class="footer-status">[VOIDSTEEL PROTOCOL: ACTIVE]</div>
+            <nav class="footer-nav">
+                <a href="#">ARCHIVES</a>
+                <a href="#">CODEX</a>
+                <a href="#">CONTACT</a>
+            </nav>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Boot sequence animation
+            const bootTexts = document.querySelectorAll('.boot-text');
+            const identityReveal = document.querySelector('.identity-reveal');
+            const progressBar = document.querySelector('.progress-bar');
+            const scrollIndicator = document.querySelector('.scroll-indicator');
+            
+            // Animate boot sequence
+            bootTexts.forEach((text, index) => {
+                setTimeout(() => {
+                    text.classList.add('active');
+                }, index * 800);
+            });
+            
+            // Show identity after boot texts
+            setTimeout(() => {
+                identityReveal.classList.add('active');
+                progressBar.classList.add('active');
+            }, bootTexts.length * 800);
+            
+            // Enable scrolling after boot sequence
+            setTimeout(() => {
+                document.body.style.overflowY = 'auto';
+                scrollIndicator.classList.add('show');
+                
+                // Show void reactor
+                const voidReactor = document.querySelector('.void-reactor');
+                if (voidReactor) {
+                    voidReactor.classList.add('active');
+                }
+                
+                // Fade out scroll indicator on first scroll
+                window.addEventListener('scroll', () => {
+                    if (window.scrollY > 50) {
+                        scrollIndicator.classList.remove('show');
+                    }
+                }, { once: true });
+            }, (bootTexts.length * 800) + 2000);
+            
+            // Intersection Observer for fade-in animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -100px 0px'
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, observerOptions);
+            
+            // Observe sections
+            const sections = ['#manifesto', '#status-log', '#decree', 'footer'];
+            sections.forEach(selector => {
+                const element = document.querySelector(selector);
+                if (element) observer.observe(element);
+            });
+            
+            // Parallax effect on mouse move
+            document.addEventListener('mousemove', (e) => {
+                const x = e.clientX / window.innerWidth;
+                const y = e.clientY / window.innerHeight;
+                
+                const noiseOverlay = document.querySelector('.noise-overlay');
+                if (noiseOverlay) {
+                    noiseOverlay.style.transform = `translate(${x * 10}px, ${y * 10}px)`;
+                }
+            });
+            
+            // Add subtle glitch effect periodically
+            setInterval(() => {
+                const body = document.body;
+                body.style.animation = 'glitch 0.1s';
+                setTimeout(() => {
+                    body.style.animation = '';
+                }, 100);
+            }, 10000);
+        });
+        
+        // Define glitch animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes glitch {
+                0%, 100% { filter: hue-rotate(0deg); }
+                50% { filter: hue-rotate(5deg) saturate(1.2); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
