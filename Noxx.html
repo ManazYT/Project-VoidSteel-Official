@@ -3,74 +3,525 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test Page — VoidSteel</title>
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Rajdhani:wght@400&display=swap" rel="stylesheet">
+    <title>NOXX | VOIDSTEEL Core System Interface</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Inter and Share Tech Mono fonts -->
     <style>
-        /* Basic dark neon theme */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Share+Tech+Mono&display=swap');
+        
+        /* VOIDSTEEL Design System Colors - DARK AESTHETIC REVISION */
+        :root {
+            --obsidian-black: #0A0A0A;      /* Deeper black */
+            --void-gray: #1A202C;         /* Dark, cool-toned gray */
+            --voidsteel-blue: #007B9E;     /* Deeper, more serious cyan/blue */
+            --aether-purple: #5A3E8A;    /* Dark, muted purple */
+            --crimson-pulse: #B91C1C;      /* Deep crimson red */
+            --ion-green: #04A777;         /* Dark, rich green */
+            --slate-gray: #A0AEC0;       /* Muted cool gray for text */
+            --magenta-pulse: #C70039;      /* Deep crimson for gradient start */
+        }
+
         body {
-            margin: 0;
-            font-family: 'Rajdhani', sans-serif;
-            background-color: #0B0C10; /* Obsidian Black */
-            color: #C5C6C7; /* Slate Gray */
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            text-align: center;
+            font-family: 'Inter', sans-serif; /* Inter for paragraphs (readability) */
+            background-color: var(--obsidian-black); /* Obsidian Black */
+            color: var(--slate-gray); /* Slate Gray for neutral text */
+            text-shadow: 0 0 0.5px rgba(197, 198, 199, 0.1); 
+            overflow-x: hidden; /* Prevent horizontal scroll */
         }
 
-        h1 {
-            font-family: 'Orbitron', sans-serif;
-            color: #00E0FF; /* Voidsteel Blue */
-            margin-bottom: 40px;
-            text-transform: uppercase;
-            font-size: 2.5rem;
-            letter-spacing: 2px;
+        /* --- FANCY UP: Animated Grid Background --- */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 123, 158, 0.07) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 123, 158, 0.07) 1px, transparent 1px);
+            background-size: 2.5rem 2.5rem;
+            z-index: -1;
+            animation: pan-grid 90s linear infinite;
         }
 
-        .placeholder {
-            width: 400px;
-            height: 200px;
-            background-color: #1F2833; /* Void Gray */
-            border: 2px dashed #00E0FF;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: #00E0FF;
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 1.2rem;
-            margin-bottom: 50px;
+        /* Custom font utility for the blocky, tech aesthetic */
+        .voidsteel-font {
+            font-family: 'Share Tech Mono', monospace;
         }
 
-        .btn-back {
-            padding: 15px 30px;
-            font-family: 'Orbitron', sans-serif;
+        /* Custom Utility Classes for VOIDSTEEL Palette */
+        .bg-obsidian { background-color: var(--obsidian-black); }
+        .bg-void-gray { background-color: var(--void-gray); }
+        .border-void-gray { border-color: var(--void-gray); }
+        .text-voidsteel-blue { color: var(--voidsteel-blue); }
+        .border-voidsteel-blue { border-color: var(--voidsteel-blue); }
+        .text-aether-purple { color: var(--aether-purple); }
+        .text-ion-green { color: var(--ion-green); }
+        .text-crimson-pulse { color: var(--crimson-pulse); }
+        
+        /* Gradient for the main NOXX title (Crimson -> Purple -> Deep Blue) */
+        .title-gradient-fill {
+            background-image: linear-gradient(90deg, var(--magenta-pulse) 0%, var(--aether-purple) 50%, var(--voidsteel-blue) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 10px rgba(199, 0, 57, 0.4), 0 0 20px rgba(0, 123, 158, 0.4); /* Adjusted glow colors */
+            animation: flicker 4s infinite alternate; /* Flicker animation */
+        }
+        
+        /* Existing Glow for secondary headers (Voidsteel Blue only) */
+        .voidsteel-title-glow {
+            text-shadow: 0 0 8px var(--voidsteel-blue), 0 0 15px rgba(0, 123, 158, 0.5); /* Adjusted glow color */
+            color: var(--voidsteel-blue); 
+        }
+        
+        /* Glowing Button (Focus/Execution Element) */
+        .glowing-button {
+            background-color: var(--voidsteel-blue);
+            color: var(--obsidian-black); 
             font-weight: 700;
-            font-size: 1rem;
-            color: #0B0C10;
-            background-color: #00E0FF;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.2s ease;
+            box-shadow: 0 0 10px rgba(0, 123, 158, 0.6), 0 0 20px rgba(0, 123, 158, 0.3); /* Adjusted glow color */
+            transition: all 0.3s ease;
+        }
+        .glowing-button:hover {
+            box-shadow: 0 0 15px var(--voidsteel-blue), 0 0 30px rgba(0, 123, 158, 0.7); /* Adjusted glow color */
+            transform: translateY(-2px) scale(1.02);
+        }
+        
+        /* --- FANCY UP: Glassmorphism Card Style --- */
+        .voidsteel-card {
+            background-color: rgba(26, 32, 44, 0.6); /* --void-gray with transparency */
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 123, 158, 0.2); /* --voidsteel-blue with transparency */
+            transition: all 0.3s ease-out;
+            position: relative; /* Needed for corner accents */
+        }
+        .voidsteel-card:hover {
+            border-color: var(--voidsteel-blue);
+            box-shadow: 0 0 20px rgba(0, 123, 158, 0.4), 0 0 40px rgba(0, 123, 158, 0.2);
+            transform: translateY(-8px);
         }
 
-        .btn-back:hover {
-            background-color: #00B8CC;
-            transform: scale(1.05);
+        /* --- FANCY UP: UI Corner Accents --- */
+        .ui-corners::before,
+        .ui-corners::after {
+            content: '';
+            position: absolute;
+            width: 1.5rem;
+            height: 1.5rem;
+            border-color: var(--voidsteel-blue);
+            border-style: solid;
+            opacity: 0.3;
+            transition: all 0.3s ease-out;
         }
+        .voidsteel-card:hover .ui-corners::before,
+        .voidsteel-card:hover .ui-corners::after {
+            opacity: 1;
+            width: calc(100% - 1rem);
+            height: calc(100% - 1rem);
+        }
+        .ui-corners::before {
+            top: 0.5rem; left: 0.5rem;
+            border-width: 2px 0 0 2px;
+        }
+        .ui-corners::after {
+            bottom: 0.5rem; right: 0.5rem;
+            border-width: 0 2px 2px 0;
+        }
+
+        /* Scrollbar styling for chat log */
+        #chat-log::-webkit-scrollbar { width: 8px; }
+        #chat-log::-webkit-scrollbar-thumb { background-color: var(--voidsteel-blue); border-radius: 4px; }
+        #chat-log::-webkit-scrollbar-track { background-color: var(--void-gray); }
+
+        /* --- Animations --- */
+        @keyframes pan-grid {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 2560px 2560px; } /* Large value for slow pan */
+        }
+        @keyframes flicker {
+            0%, 19.999%, 22%, 62.999%, 64%, 64.999%, 70%, 100% { opacity: 1; }
+            20%, 21.999%, 63%, 63.999%, 65%, 69.999% { opacity: 0.9; }
+        }
+        @keyframes fadeInSlide {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        /* --- FANCY UP: Hero Entry Animations --- */
+        @keyframes fadeInUp { 
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .hero-animate-1 { animation: fadeInUp 0.7s ease-out 0.2s backwards; }
+        .hero-animate-2 { animation: fadeInUp 0.7s ease-out 0.4s backwards; }
+        .hero-animate-3 { animation: fadeInUp 0.7s ease-out 0.6s backwards; }
+        .hero-animate-4 { animation: fadeInUp 0.7s ease-out 0.8s backwards; }
+
+        .card-animate-1 { animation: fadeInSlide 0.6s ease-out 0.8s backwards; }
+        .card-animate-2 { animation: fadeInSlide 0.6s ease-out 1.0s backwards; }
+        .card-animate-3 { animation: fadeInSlide 0.6s ease-out 1.2s backwards; }
     </style>
 </head>
-<body>
-    <h1>Test Page</h1>
+<body class="min-h-screen">
 
-    <div class="placeholder">
-        <!-- This is where something else will go -->
-        Something Else Placeholder
-    </div>
+    <!-- Navigation Bar -->
+    <header class="sticky top-0 z-10 bg-void-gray/70 backdrop-blur-lg shadow-2xl shadow-black/50 border-b border-voidsteel-blue/30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <!-- Title uses gradient and blocky font with flicker -->
+            <a href="#hero" class="text-3xl font-black tracking-widest voidsteel-font title-gradient-fill">
+                NOXX
+            </a>
+            <!-- Nav links use blocky font -->
+            <nav class="hidden sm:flex space-x-6 voidsteel-font">
+                <a href="#focus" class="text-sm font-medium hover:text-voidsteel-blue transition duration-150">// SKILLS_MATRIX</a>
+                <a href="#voidsteel" class="text-sm font-medium hover:text-voidsteel-blue transition duration-150">:: VOIDSTEEL_CORE</a>
+                <a href="#chat-container" class="text-sm font-medium hover:text-ion-green transition duration-150">:: COMM_CHANNEL</a>
+            </nav>
+        </div>
+    </header>
 
-    <button class="btn-back" onclick="window.location.href='index.html'">Back to Home</button>
+    <!-- Main Content Wrapper -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
+
+        <!-- 1. Hero Section -->
+        <section id="hero" class="pt-10 md:pt-20 text-center">
+            <p class="text-xl text-voidsteel-blue mb-2 font-mono hero-animate-1">// CORE_MEMBER_IDENTITY_ACTIVE</p>
+            <h1 class="text-6xl sm:text-8xl lg:text-9xl font-black mb-6 leading-none tracking-tight hero-animate-2">
+                <span class="voidsteel-font title-gradient-fill">
+                    NOXX
+                </span>
+            </h1>
+            <p class="text-lg sm:text-xl font-medium text-slate-gray max-w-4xl mx-auto mb-10 hero-animate-3">
+                Architecting **Sequential Art** narratives and maintaining **Code Infrastructure** for the VOIDSTEEL initiative.
+            </p>
+            <a href="#chat-container" class="inline-block px-8 py-3 text-lg rounded-md glowing-button shadow-xl hero-animate-4">
+                INITIATE PUBLIC DATA STREAM 
+            </a>
+        </section>
+
+        <!-- 2. Focus Areas Section: Structured Data Panels -->
+        <section id="focus" class="mt-20 md:mt-32">
+            <!-- Header uses blocky font with flicker -->
+            <h2 class="text-4xl font-bold text-center mb-16 text-voidsteel-blue voidsteel-title-glow voidsteel-font" style="animation: flicker 3s infinite;">SKILLS_MATRIX [System Status: <span class="text-ion-green">OPTIMAL</span>]</h2>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                
+                <div class="p-8 rounded-xl shadow-lg voidsteel-card border-t-4 border-voidsteel-blue card-animate-1">
+                    <div class="ui-corners"></div>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mb-4 text-voidsteel-blue" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 15.5L12 20L7.5 15.5"></path><path d="M12 4v7a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2z"></path><path d="M12 12v10"></path></svg>
+                    <h3 class="text-2xl font-semibold mb-3 text-white voidsteel-font">Manga Fabrication Module</h3>
+                    <p class="text-slate-gray">Direct artistic control over visual assets and sequential pacing. Specializing in **dynamic panel composition** and core lore visualization for VOIDSTEEL narratives.</p>
+                </div>
+                
+                <div class="p-8 rounded-xl shadow-lg voidsteel-card border-t-4 border-aether-purple card-animate-2">
+                    <div class="ui-corners"></div>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mb-4 text-aether-purple" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+                    <h3 class="text-2xl font-semibold mb-3 text-white voidsteel-font">Digital Infrastructure Weaving</h3>
+                    <p class="text-slate-gray">High competency in **Full-Stack Development (Code)**, building proprietary tools for VOIDSTEEL's creative pipeline, and securing all digital dissemination points.</p>
+                </div>
+                
+                <div class="p-8 rounded-xl shadow-lg voidsteel-card border-t-4 border-ion-green card-animate-3">
+                    <div class="ui-corners"></div>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mb-4 text-ion-green" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                    <h3 class="text-2xl font-semibold mb-3 text-white voidsteel-font">Core Directive Execution</h3>
+                    <p class="text-slate-gray">As a Core Member, I drive quality control and **strategic alignment** across all creative and technical departments, ensuring mission integrity.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. VOIDSTEEL Directive Log -->
+        <section id="voidsteel" class="mt-20 md:mt-32 bg-void-gray/70 backdrop-blur-lg p-10 rounded-2xl border border-voidsteel-blue/50 shadow-xl shadow-black/40">
+            <!-- Header uses blocky font -->
+            <h2 class="text-3xl font-bold mb-6 text-center text-voidsteel-blue voidsteel-title-glow voidsteel-font">// VOIDSTEEL_INITIATIVE_LOG (ENTRY: NOXX)</h2>
+            <blockquote class="text-center italic text-xl text-slate-gray max-w-4xl mx-auto border-l-4 border-voidsteel-blue pl-6 py-2">
+                "The system requires heavy, industrial stability. My function is the seamless integration of high-impact visual design with fault-tolerant code. Every output must reflect the relentless, endless nature of the VOIDSTEEL world."
+            </blockquote>
+            <div class="text-center mt-6 text-sm font-mono text-ion-green voidsteel-font">
+                 [STATUS: SYNCHRONIZED | PRECISION: 100%]
+            </div>
+        </section>
+        
+        <!-- 4. Real-Time Collaborative Chat System (New Section) -->
+        <section id="chat-container" class="mt-20 md:mt-32">
+            <!-- Header uses blocky font -->
+            <h2 class="text-4xl font-bold text-center mb-6 text-ion-green voidsteel-title-glow voidsteel-font">:: VOIDSTEEL_COMMUNICATION_CHANNEL</h2>
+            <p class="text-center text-sm font-mono text-slate-gray mb-6 voidsteel-font">Type <code class="text-voidsteel-blue">/secret</code> to activate the hidden diagnostic module (game).</p>
+
+            <!-- Main Chat Interface Container -->
+            <div id="main-chat-interface" class="max-w-3xl mx-auto bg-void-gray/70 backdrop-blur-lg rounded-xl shadow-2xl border border-voidsteel-blue/30 overflow-hidden hidden">
+                <!-- Chat Log -->
+                <div id="chat-log" class="h-80 p-4 space-y-3 overflow-y-auto bg-obsidian/80 border-b border-voidsteel-blue/50">
+                    <p id="auth-status" class="text-center text-sm font-mono text-voidsteel-blue voidsteel-font">[STATUS: CONNECTING...]</p>
+                    <!-- Messages will be injected here -->
+                </div>
+                
+                <!-- Chat Input -->
+                <div class="p-4 flex gap-2">
+                    <input type="text" id="chat-input" placeholder="Enter message or /secret protocol..." 
+                           class="flex-grow p-3 rounded-md bg-obsidian text-slate-gray border border-void-gray focus:border-voidsteel-blue focus:ring focus:ring-voidsteel-blue/50 transition duration-200 voidsteel-font"
+                           onkeypress="if(event.key === 'Enter') { sendMessage(); }">
+                    <button onclick="sendMessage()" class="glowing-button px-4 py-3 text-sm rounded-md shadow-lg flex-shrink-0 voidsteel-font">
+                        SEND
+                    </button>
+                </div>
+            </div>
+
+            <!-- Codename Input Interface -->
+            <div id="codename-input-interface" class="max-w-xl mx-auto p-8 rounded-xl bg-void-gray/70 backdrop-blur-lg shadow-2xl border border-aether-purple/50">
+                <h3 class="text-2xl font-bold mb-4 text-aether-purple voidsteel-font">// IDENTIFY_PROTOCOL_REQUIRED</h3>
+                <p class="text-slate-gray mb-4">Please enter your VOIDSTEEL **Codename** to initiate the secure data stream.</p>
+                <div class="flex gap-2">
+                    <input type="text" id="codename-input" placeholder="Codename..." 
+                           class="flex-grow p-3 rounded-md bg-obsidian text-ion-green border border-aether-purple focus:border-aether-purple focus:ring focus:ring-aether-purple/50 transition duration-200 voidsteel-font"
+                           onkeypress="if(event.key === 'Enter') { setCodename(); }">
+                    <button onclick="setCodename()" class="glowing-button px-4 py-3 text-sm rounded-md shadow-lg flex-shrink-0 voidsteel-font" style="background-color: var(--aether-purple); box-shadow: 0 0 10px var(--aether-purple);">
+                        SYNC
+                    </button>
+                </div>
+                <p id="codename-error" class="mt-2 text-sm text-crimson-pulse voidsteel-font hidden">[ERROR] Codename cannot be empty.</p>
+            </div>
+
+        </section>
+        
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-20 py-8 border-t border-void-gray text-center text-slate-gray">
+        <p class="text-sm font-mono">// VOIDSTEEL SYSTEM BOOTSTRAP | NOXX 2025</p>
+    </footer>
+
+    <!-- Firebase SDK Imports -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, query, limit, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // IMPORTANT: Global variables provided by the Canvas environment
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+        let app, db, auth;
+        let userId = null;
+        let userName = localStorage.getItem('voidsteel_codename'); // Load saved codename
+
+        // --- Codename Logic ---
+
+        window.setCodename = function() {
+            const input = document.getElementById('codename-input');
+            const errorDisplay = document.getElementById('codename-error');
+            const name = input.value.trim();
+            
+            if (name.length < 1) {
+                errorDisplay.classList.remove('hidden');
+                return;
+            }
+            
+            localStorage.setItem('voidsteel_codename', name);
+            userName = name;
+            errorDisplay.classList.add('hidden');
+            
+            // Hide codename input, show main chat
+            document.getElementById('codename-input-interface').classList.add('hidden');
+            document.getElementById('main-chat-interface').classList.remove('hidden');
+            
+            // Re-initialize Firebase now that we have a name
+            initFirebase();
+        }
+
+        function checkCodenameAndStart() {
+            if (userName) {
+                // Name found, show chat immediately and start Firebase
+                document.getElementById('codename-input-interface').classList.add('hidden');
+                document.getElementById('main-chat-interface').classList.remove('hidden');
+                initFirebase();
+            } else {
+                // No name found, show input screen
+                document.getElementById('codename-input-interface').classList.remove('hidden');
+            }
+        }
+        
+        // --- Core Application Functions ---
+        
+        const scrollToBottom = () => {
+            const chatLog = document.getElementById('chat-log');
+            chatLog.scrollTop = chatLog.scrollHeight;
+        };
+        
+        // Simple client-side game logic for the secret module
+        let secretGameTarget = Math.floor(Math.random() * 10) + 1;
+        let secretGameAttempts = 0;
+        
+        window.tryGameGuess = function() {
+            const input = document.getElementById('game-guess-input');
+            const resultDisplay = document.getElementById('game-result-display');
+            const guess = parseInt(input.value);
+
+            if (isNaN(guess) || guess < 1 || guess > 10) {
+                resultDisplay.innerHTML = `<span class="text-crimson-pulse voidsteel-font">[ERROR] Invalid Input. (Range: 1-10)</span>`;
+                return;
+            }
+
+            secretGameAttempts++;
+
+            if (guess === secretGameTarget) {
+                resultDisplay.innerHTML = `<span class="text-ion-green voidsteel-font">[SUCCESS] System Decrypted in ${secretGameAttempts} attempts!</span>`;
+                input.disabled = true;
+                document.getElementById('game-button').disabled = true;
+                // Reset for next game
+                secretGameTarget = Math.floor(Math.random() * 10) + 1; 
+                secretGameAttempts = 0;
+            } else if (guess < secretGameTarget) {
+                resultDisplay.innerHTML = `<span class="text-voidsteel-blue voidsteel-font">[INFO] Target Higher. Attempts: ${secretGameAttempts}</span>`;
+            } else {
+                resultDisplay.innerHTML = `<span class="text-voidsteel-blue voidsteel-font">[INFO] Target Lower. Attempts: ${secretGameAttempts}</span>`;
+            }
+            input.value = '';
+            input.focus();
+        }
+
+        // --- Core Firebase Initialization ---
+        
+        const initFirebase = async () => {
+            if (app) return; // Prevent double initialization
+
+            try {
+                if (Object.keys(firebaseConfig).length === 0) {
+                    console.warn("Firebase config is missing. Running in non-persistent mode.");
+                    return;
+                }
+                
+                app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
+                
+                // Sign in anonymously or with custom token
+                if (initialAuthToken) {
+                    await signInWithCustomToken(auth, initialAuthToken);
+                } else {
+                    await signInAnonymously(auth);
+                }
+
+                onAuthStateChanged(auth, (user) => {
+                    if (user) {
+                        userId = user.uid;
+                        document.getElementById('auth-status').innerHTML = `<span class="text-ion-green voidsteel-font">[STATUS: SYNCHRONIZED] User ID: ${userId.substring(0, 8)}...</span>`;
+                        loadMessages();
+                    } else {
+                        document.getElementById('auth-status').innerHTML = `<span class="text-crimson-pulse voidsteel-font">[STATUS: AUTH_FAIL] Please refresh.</span>`;
+                    }
+                });
+
+            } catch (error) {
+                console.error("Firebase initialization failed:", error);
+                document.getElementById('auth-status').innerHTML = `<span class="text-crimson-pulse voidsteel-font">[ERROR] System Offline. Check Console.</span>`;
+            }
+        };
+
+        // --- Firestore Data Operations ---
+
+        window.sendMessage = async function() {
+            const input = document.getElementById('chat-input');
+            const text = input.value.trim();
+            if (!text || !db || !auth.currentUser || !userName) return;
+
+            const currentUserId = auth.currentUser.uid;
+            const chatCollectionRef = collection(db, `artifacts/${appId}/public/data/voidsteel_chat`);
+
+            input.value = ''; // Clear input immediately
+
+            if (text.toLowerCase() === '/secret') {
+                // Special protocol for the secret game
+                await addDoc(chatCollectionRef, {
+                    text: 'VOIDSTEEL_SECRET_PROTOCOL_INITIATED',
+                    timestamp: serverTimestamp(),
+                    userId: 'SYSTEM',
+                    userName: 'SYSTEM',
+                    type: 'game_start' 
+                });
+            } else {
+                // Regular message
+                await addDoc(chatCollectionRef, {
+                    text: text,
+                    timestamp: serverTimestamp(),
+                    userId: currentUserId,
+                    userName: userName, // Use the user's chosen codename
+                    type: 'message'
+                });
+            }
+        };
+
+        const loadMessages = () => {
+            const chatLog = document.getElementById('chat-log');
+            
+            const messagesQuery = query(
+                collection(db, `artifacts/${appId}/public/data/voidsteel_chat`),
+                limit(50)
+            );
+
+            onSnapshot(messagesQuery, (snapshot) => {
+                let messages = [];
+                snapshot.docs.forEach(doc => {
+                    messages.push({ id: doc.id, ...doc.data() });
+                });
+
+                // Client-side sort by timestamp (best effort)
+                messages.sort((a, b) => (a.timestamp?.seconds || 0) - (b.timestamp?.seconds || 0));
+
+                chatLog.innerHTML = `<p id="auth-status" class="text-center text-sm font-mono text-ion-green voidsteel-font">[STATUS: SYNCHRONIZED] User ID: ${userId.substring(0, 8)}...</p>`;
+
+                messages.forEach(data => {
+                    let messageElement = document.createElement('div');
+                    
+                    if (data.type === 'game_start') {
+                        // Secret Game Module HTML Injection
+                        messageElement.className = 'p-3 bg-obsidian rounded-lg border-2 border-aether-purple shadow-lg shadow-aether-purple/20';
+                        messageElement.innerHTML = `
+                            <p class="text-lg font-bold text-aether-purple mb-2 voidsteel-font">// DIAGNOSTIC_MODULE_07 (MATRIX DECRYPTION)</p>
+                            <p class="text-sm text-slate-gray mb-3 voidsteel-font">Goal: Guess the system code (1-10) in the fewest attempts.</p>
+                            <div class="flex gap-2">
+                                <input type="number" id="game-guess-input" min="1" max="10" placeholder="Enter Code (1-10)"
+                                       class="flex-grow p-2 rounded-md bg-void-gray text-ion-green border border-aether-purple focus:ring-aether-purple/70 voidsteel-font">
+                                <button id="game-button" onclick="tryGameGuess()" class="px-4 py-2 bg-aether-purple text-white rounded-md hover:bg-aether-purple/80 transition duration-150 voidsteel-font">
+                                    EXECUTE
+                                </button>
+                            </div>
+                            <p id="game-result-display" class="mt-2 text-sm font-mono text-voidsteel-blue voidsteel-font">[INFO] Awaiting Input...</p>
+                        `;
+                    } else if (data.userId === auth.currentUser.uid) {
+                        // User's own message (Crimson Pulse for personal focus)
+                        messageElement.className = 'text-right';
+                        messageElement.innerHTML = `
+                            <span class="text-sm font-mono text-crimson-pulse voidsteel-font">[${data.userName}]</span>
+                            <div class="inline-block p-2 rounded-lg bg-crimson-pulse/20 text-slate-gray max-w-xs md:max-w-md break-words voidsteel-font">${data.text}</div>
+                        `;
+                    } else if (data.userId === 'SYSTEM') {
+                         // System messages (Ion Green for stability)
+                        messageElement.className = 'text-center';
+                        messageElement.innerHTML = `
+                            <div class="inline-block px-3 py-1 rounded-full bg-ion-green/10 text-ion-green text-xs font-mono border border-ion-green/50 voidsteel-font">${data.text}</div>
+                        `;
+                    } else {
+                        // Other users' messages (Voidsteel Blue)
+                        messageElement.innerHTML = `
+                            <span class="text-sm font-mono text-voidsteel-blue voidsteel-font">[${data.userName}]</span>
+                            <div class="p-2 rounded-lg bg-voidsteel-blue/10 text-slate-gray max-w-xs md:max-w-md break-words voidsteel-font">${data.text}</div>
+                        `;
+                    }
+                    chatLog.appendChild(messageElement);
+                });
+                scrollToBottom();
+            }, (error) => {
+                console.error("Error listening to messages:", error);
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'text-center text-crimson-pulse text-sm font-mono voidsteel-font';
+                errorDiv.textContent = '[ERROR] Data Stream Interrupted.';
+                chatLog.appendChild(errorDiv);
+            });
+        };
+
+        // Start the application by checking for a saved codename
+        window.onload = checkCodenameAndStart;
+    </script>
 </body>
 </html>
