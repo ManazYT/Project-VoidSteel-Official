@@ -28,10 +28,11 @@ box-sizing: border-box;
 --manaz-start-color: #5d00ff;   /* ManaZ: Faint Violet/Void (UPDATED) */
 --manaz-end-color: #0a0a0a;     /* ManaZ: Obsidian black */
 --void-pulse: #3a007a; /* Darker purple for the void pulse (NEW) */
---intensity-start-color: #00fff7; /* InfiniteIntensity: Cyan plasma */
---intensity-end-color: #aaff00; /* InfiniteIntensity: Neon green */
---yeteu-start-color: #7d00ff; /* Yeteu: Neon indigo */
---yeteu-end-color: #00c8ff;   /* Yeteu: Data blue */
+
+/* Updated InfiniteIntensity to Ice Theme */
+--ice-start-color: #00f7ff; /* InfiniteIntensity: Bright Aqua */
+--ice-end-color: #006aff; /* InfiniteIntensity: Deep Blue */
+
 --degree-start-color: #b0b0b0; /* JurryDegree: Polished steel */
 --degree-end-color: #00aaff;   /* JurryDegree: Electric blue */
 --jailer-start-color: #ff2a00; /* OniJailer: Blood red */
@@ -40,6 +41,8 @@ box-sizing: border-box;
 --noxx-end-color: #7a00ff;     /* Noxx: Violet edge glow */
 --countless-start-color: #ffffff; /* Countless: White */
 --countless-end-color: #33ffff;   /* Countless: Cyan */
+
+/* Yeteu colors removed */
 }
 
 body {
@@ -495,31 +498,24 @@ z-index: 2;
     50% { filter: contrast(1.1) brightness(0.9) hue-rotate(-5deg); }
 }
 
-/* Old keyframes are removed: corePulse, lightStreaks, emberTrail, auraFlash, dynamicVibrate, electricSweep, etc. */
-/* Keeping only the essential, non-ManaZ keyframes below */
+/* InfiniteIntensity (ICE THEME): Frost Shift / Ice Shard Pulse */
+@keyframes frostShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+@keyframes iceShardPulse {
+    0% { transform: translate(0, 0); filter: drop-shadow(0 0 5px var(--ice-start-color)); }
+    50% { transform: translate(0, -1px); filter: drop-shadow(0 0 15px var(--ice-end-color)); }
+    100% { transform: translate(0, 0); filter: drop-shadow(0 0 5px var(--ice-start-color)); }
+}
 
-/* InfiniteIntensity: Dynamic vibration / Electric pulse sweep */
+/* JurryDegree: Linear shine / Spark discharge */
 @keyframes dynamicVibrate {
     0% { transform: translate(0.5px, 0.5px); }
     50% { transform: translate(-0.5px, -0.5px); }
     100% { transform: translate(0.5px, 0.5px); }
 }
-@keyframes electricSweep {
-    0% { background-position: -200% 0; }
-    100% { background-position: 200% 0; }
-}
-
-/* Yeteu: Data glitch / Letter phase out */
-@keyframes dataGlitch {
-    0%, 100% { text-shadow: none; }
-    50% { text-shadow: 1px 0 0 var(--yeteu-end-color), -1px 0 0 var(--yeteu-start-color); transform: translateX(1px); }
-}
-@keyframes microFlicker {
-    0%, 100% { filter: brightness(1); }
-    50% { filter: brightness(1.2); }
-}
-
-/* JurryDegree: Linear shine / Spark discharge */
 @keyframes linearShine {
     0% { background-position: 0% 0%; }
     100% { background-position: 100% 100%; }
@@ -617,70 +613,36 @@ body.manaz-hover {
 }
 
 
-/* 2. InfiniteIntensity - The Relentless Reactor */
-.intensity-card {
-    border-color: var(--intensity-start-color);
-    /* Background blur faintly expands and contracts */
-    box-shadow: 0 0 15px rgba(0, 255, 247, 0.5);
-    transition: box-shadow 0.5s ease-in-out;
+/* 2. InfiniteIntensity - The Ice Reactor (NEW ICE EFFECTS) */
+.ice-card {
+    background: radial-gradient(circle at top, rgba(0, 106, 255, 0.3) 0%, rgba(20, 20, 20, 0.8) 70%);
+    border-color: var(--ice-start-color);
+    box-shadow: 0 0 20px rgba(0, 247, 255, 0.6);
+    transition: all 0.3s ease-in-out;
 }
-.intensity-card .member-name {
-    /* Cyan plasma -> neon green gradient */
-    background: linear-gradient(90deg, var(--intensity-start-color), var(--intensity-end-color));
+.ice-card .member-name {
+    /* Ice Blue Gradient */
+    background: linear-gradient(90deg, var(--ice-start-color), var(--ice-end-color));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    /* Dynamic vibration + Electric pulse lines sweep horizontally */
-    background-image: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5) 50%, transparent);
     background-size: 200% 100%;
-    animation: electricSweep 2s linear infinite, dynamicVibrate 0.05s linear infinite;
+    animation: frostShift 3s linear infinite alternate, iceShardPulse 2s ease-in-out infinite alternate;
 }
-.intensity-card:hover .member-name {
-    /* Energy surge flash races through text (faster sweep) */
-    animation: electricSweep 0.2s linear infinite, dynamicVibrate 0.05s linear infinite;
-    text-shadow: 0 0 10px var(--intensity-end-color), 0 0 20px var(--intensity-start-color);
+.ice-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 30px var(--ice-end-color), 0 0 50px rgba(0, 247, 255, 0.8);
+    /* Add a subtle frost effect on hover */
+    filter: brightness(1.2) contrast(1.1);
 }
-
-
-/* 3. Yeteu - The Neural Strategist */
-.yeteu-card {
-    background: rgba(10, 10, 20, 0.8);
-    /* Micro flicker distortion on card */
-    animation: microFlicker 0.1s infinite alternate;
-}
-.yeteu-card .member-name {
-    color: var(--yeteu-end-color);
-    text-shadow: 0 0 5px var(--yeteu-start-color);
-    /* Randomized data glitch lines */
-    animation: dataGlitch 5s infinite steps(20);
-    transition: all 0.1s;
-}
-.yeteu-card:hover .member-name {
-    /* Text temporarily duplicates, overlaps by 1-2px */
-    text-shadow: 2px 2px 0 var(--yeteu-start-color), -2px -2px 0 var(--yeteu-end-color);
-    transform: translateX(1px);
-}
-.yeteu-card .member-name::after {
-    /* Vertical code stream on hover */
-    content: '0101100101001010';
-    position: absolute;
-    bottom: 0; right: 0;
-    font-size: 0.8rem;
-    color: rgba(0, 200, 255, 0.5);
-    opacity: 0;
-    transition: opacity 0.5s;
-    pointer-events: none;
-    line-height: 1;
-    overflow: hidden;
-    transform: translateY(100%);
-}
-.yeteu-card:hover .member-name::after {
-    opacity: 1;
-    transform: translateY(-100%);
-    transition: transform 0.5s linear, opacity 0.2s;
+.ice-card:hover .member-name {
+    /* Freeze the text effect and make it sharply defined */
+    animation: none;
+    text-shadow: 0 0 15px #ffffff, 0 0 20px var(--ice-end-color);
 }
 
-/* 4. JurryDegree - The Iron Sentinel */
+
+/* 3. JurryDegree - The Iron Sentinel */
 .degree-card {
     border-color: var(--degree-end-color);
     /* Polished steel texture */
@@ -706,7 +668,7 @@ body.manaz-hover {
     animation: dynamicVibrate 0.1s linear 3;
 }
 
-/* 5. OniJailer - The Crimson Warden */
+/* 4. OniJailer - The Crimson Warden */
 .jailer-card {
     /* Heat distortion ripple (subtle wave effect behind the name) */
     background: radial-gradient(circle at bottom, var(--jailer-start-color) 0%, rgba(20, 20, 20, 0.8) 70%);
@@ -745,7 +707,7 @@ body.manaz-hover {
     transition: opacity 0.1s, transform 0.1s;
 }
 
-/* 6. Noxx - The Shadow Coder */
+/* 5. Noxx - The Shadow Coder */
 .noxx-card {
     background: var(--noxx-start-color);
     border-color: var(--noxx-end-color);
@@ -769,7 +731,7 @@ body.manaz-hover {
     text-shadow: 0 0 10px var(--noxx-end-color), 0 0 20px rgba(122, 0, 255, 0.5);
 }
 
-/* 7. Countless - The Fractured One */
+/* 6. Countless - The Fractured One */
 .countless-card {
     /* Pale ghostly aura, softly diffused */
     box-shadow: 0 0 10px rgba(51, 255, 255, 0.5);
@@ -1068,10 +1030,10 @@ color: var(--text-primary);
     background: var(--card-bg);
     padding: 30px;
     border-radius: 8px;
-    border: 1px solid rgba(0, 170, 255, 0.2); /* Use Degree's blue */
+    border: 1px solid rgba(0, 170, 255, 0.2); 
     box-shadow: 0 0 15px rgba(0, 170, 255, 0.3);
     width: 100%;
-    max-width: 600px;
+    max-width: 800px; /* Increased max-width for the task description */
     transition: all 0.3s ease;
 }
 
@@ -1085,6 +1047,7 @@ color: var(--text-primary);
     justify-content: space-between;
     align-items: center;
     margin-bottom: 15px;
+    flex-wrap: wrap; /* Allow wrapping on mobile */
 }
 
 .mini-project-title {
@@ -1108,6 +1071,7 @@ color: var(--text-primary);
     overflow: hidden;
     position: relative; /* Crucial for positioning the text overlay */
     box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
+    margin-top: 15px; /* Added spacing */
 }
 
 .progress-bar-fill {
@@ -1131,7 +1095,7 @@ color: var(--text-primary);
 
 
 .mini-project-desc {
-    font-size: 0.9rem;
+    font-size: 1rem; /* Slightly larger for main task */
     color: var(--text-secondary);
     margin-top: 15px;
     line-height: 1.6;
@@ -1301,17 +1265,17 @@ max-width: 200px;
 </section>
 
 <section id="mini-projects">
-    <h2>Mini-Projects</h2>
+    <h2>Active Task</h2>
     <div id="mini-projects-grid">
         <div class="mini-project-card">
             <div class="mini-project-header">
-                <h3 class="mini-project-title">Jurry's Digital Forge</h3>
-                <span class="mini-project-member">JurryDegree</span>
+                <h3 class="mini-project-title">Member Intro Website Task</h3>
+                <span class="mini-project-member">All Core Members</span>
             </div>
-            <p class="mini-project-desc">Development of a dedicated personal portfolio/resource website by JurryDegree to establish and prove his core capabilities to the collective. Started: 09/10/2025. Deadline: 12/10/2025.</p>
+            <p class="mini-project-desc">All members have been tasked with creating their own personal introductional website using html in a stylish way with the deadline being **20 October 2025**.</p>
             <div class="progress-bar-container">
-                <div id="degree-progress-fill" class="progress-bar-fill" style="width: 0%;"></div>
-                <span id="degree-progress-text" class="progress-text-overlay">0%</span>
+                <div id="global-progress-fill" class="progress-bar-fill" style="width: 0%;"></div>
+                <span id="global-progress-text" class="progress-text-overlay">0%</span>
             </div>
         </div>
         </div>
@@ -1328,7 +1292,7 @@ max-width: 200px;
 <h3 class="member-name">JurryDegree</h3>
 <p class="member-role">Core Member</p>
 </div>
-<div class="member-card intensity-card">
+<div class="member-card ice-card">
 <h3 class="member-name">InfiniteIntensity</h3>
 <p class="member-role">Core Member</p>
 </div>
@@ -1342,10 +1306,6 @@ max-width: 200px;
 </div>
 <div class="member-card noxx-card">
 <h3 class="member-name">Noxx</h3>
-<p class="member-role">Core Member</p>
-</div>
-<div class="member-card yeteu-card">
-<h3 class="member-name">Yeteu</h3>
 <p class="member-role">Core Member</p>
 </div>
 </div>
@@ -1579,14 +1539,15 @@ particle.style.boxShadow = '';
 }, 100);
 }
 
-// --- JURRY DEGREE PROGRESS BAR LOGIC ---
-const JURRY_START_DATE = new Date('2025-10-09T00:00:00Z');
-const JURRY_DEADLINE = new Date('2025-10-12T23:59:59Z');
+// --- GLOBAL TASK PROGRESS BAR LOGIC (NEW) ---
+// Task: Member Intro Websites
+const GLOBAL_TASK_START_DATE = new Date('2025-10-10T00:00:00Z'); // Assuming today is the start date
+const GLOBAL_TASK_DEADLINE = new Date('2025-10-20T23:59:59Z');
 
-function updateJurryProgressBar() {
+function updateGlobalProgressBar() {
     const now = new Date();
-    const startTimestamp = JURRY_START_DATE.getTime();
-    const deadlineTimestamp = JURRY_DEADLINE.getTime();
+    const startTimestamp = GLOBAL_TASK_START_DATE.getTime();
+    const deadlineTimestamp = GLOBAL_TASK_DEADLINE.getTime();
     const nowTimestamp = now.getTime();
 
     // Calculate durations in milliseconds
@@ -1595,9 +1556,9 @@ function updateJurryProgressBar() {
 
     // Clamp elapsed duration
     if (elapsedDuration < 0) {
-        elapsedDuration = 0; // Project hasn't started yet
+        elapsedDuration = 0; // Task hasn't started yet
     } else if (elapsedDuration > totalDuration) {
-        elapsedDuration = totalDuration; // Project is over 100%
+        elapsedDuration = totalDuration; // Task is over 100%
     }
 
     // Calculate the percentage
@@ -1605,21 +1566,22 @@ function updateJurryProgressBar() {
     if (totalDuration > 0) {
         progressPercentage = (elapsedDuration / totalDuration) * 100;
     } else if (elapsedDuration >= 0) {
-        progressPercentage = 100; // Start and end date are the same, treat as 100%
+        progressPercentage = 100; // Start and end date are the same or already past
     }
 
     // Round the percentage to one decimal place
     const roundedProgress = Math.min(100, Math.max(0, Math.round(progressPercentage * 10) / 10));
 
     // Update DOM
-    const fillBar = document.getElementById('degree-progress-fill');
-    const percentageText = document.getElementById('degree-progress-text');
+    const fillBar = document.getElementById('global-progress-fill');
+    const percentageText = document.getElementById('global-progress-text');
 
     if (fillBar && percentageText) {
         fillBar.style.width = `${roundedProgress}%`;
         percentageText.textContent = `${roundedProgress}%`;
     }
 }
+
 
 // --- MANAZ GLOBAL HOVER LOGIC ---
 const manazCard = document.querySelector('.manaz-card');
@@ -1635,12 +1597,13 @@ if (manazCard) {
     });
 }
 
-// Initial run for the progress bar
+// Initial run for the global progress bar
 document.addEventListener('DOMContentLoaded', () => {
-    updateJurryProgressBar(); // Initial run
+    // Run the new global task progress bar
+    updateGlobalProgressBar(); 
     
     // Update every minute for live progress
-    setInterval(updateJurryProgressBar, 60000); 
+    setInterval(updateGlobalProgressBar, 60000); 
 });
 </script>
 </body>
