@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NOXX | VOIDSTEEL Core System Interface</title>
-    <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Load Inter and Share Tech Mono fonts -->
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Share+Tech+Mono&display=swap');
         
@@ -17,7 +15,7 @@
             --voidsteel-blue: #007B9E;     /* Deeper, more serious cyan/blue */
             --aether-purple: #5A3E8A;    /* Dark, muted purple */
             --crimson-pulse: #B91C1C;      /* Deep crimson red */
-            --ion-green: #04A777;         /* Dark, rich green */
+            --ion-green: #04A777;          /* Dark, rich green */
             --slate-gray: #A0AEC0;       /* Muted cool gray for text */
             --magenta-pulse: #C70039;      /* Deep crimson for gradient start */
         }
@@ -164,26 +162,22 @@
 </head>
 <body class="min-h-screen">
 
-    <!-- Navigation Bar -->
     <header class="sticky top-0 z-10 bg-void-gray/70 backdrop-blur-lg shadow-2xl shadow-black/50 border-b border-voidsteel-blue/30">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-            <!-- Title uses gradient and blocky font with flicker -->
             <a href="#hero" class="text-3xl font-black tracking-widest voidsteel-font title-gradient-fill">
                 NOXX
             </a>
-            <!-- Nav links use blocky font -->
-            <nav class="hidden sm:flex space-x-6 voidsteel-font">
-                <a href="#focus" class="text-sm font-medium hover:text-voidsteel-blue transition duration-150">// SKILLS_MATRIX</a>
-                <a href="#voidsteel" class="text-sm font-medium hover:text-voidsteel-blue transition duration-150">:: VOIDSTEEL_CORE</a>
-                <a href="#chat-container" class="text-sm font-medium hover:text-ion-green transition duration-150">:: COMM_CHANNEL</a>
+            <nav class="flex space-x-6 voidsteel-font">
+                <a href="index.html" class="text-sm font-medium hover:text-ion-green transition duration-150">HOME</a>
+                <a href="#focus" class="text-sm font-medium hover:text-voidsteel-blue transition duration-150">SKILLS</a>
+                <a href="#voidsteel" class="text-sm font-medium hover:text-voidsteel-blue transition duration-150">ENTRY</a>
+                <a href="#chat-container" class="text-sm font-medium hover:text-ion-green transition duration-150">COMM_CHANNEL</a>
             </nav>
         </div>
     </header>
 
-    <!-- Main Content Wrapper -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
 
-        <!-- 1. Hero Section -->
         <section id="hero" class="pt-10 md:pt-20 text-center">
             <p class="text-xl text-voidsteel-blue mb-2 font-mono hero-animate-1">// CORE_MEMBER_IDENTITY_ACTIVE</p>
             <h1 class="text-6xl sm:text-8xl lg:text-9xl font-black mb-6 leading-none tracking-tight hero-animate-2">
@@ -199,9 +193,7 @@
             </a>
         </section>
 
-        <!-- 2. Focus Areas Section: Structured Data Panels -->
         <section id="focus" class="mt-20 md:mt-32">
-            <!-- Header uses blocky font with flicker -->
             <h2 class="text-4xl font-bold text-center mb-16 text-voidsteel-blue voidsteel-title-glow voidsteel-font" style="animation: flicker 3s infinite;">SKILLS_MATRIX [System Status: <span class="text-ion-green">OPTIMAL</span>]</h2>
             
             <div class="grid md:grid-cols-3 gap-8">
@@ -229,51 +221,42 @@
             </div>
         </section>
 
-        <!-- 3. VOIDSTEEL Directive Log -->
         <section id="voidsteel" class="mt-20 md:mt-32 bg-void-gray/70 backdrop-blur-lg p-10 rounded-2xl border border-voidsteel-blue/50 shadow-xl shadow-black/40">
-            <!-- Header uses blocky font -->
             <h2 class="text-3xl font-bold mb-6 text-center text-voidsteel-blue voidsteel-title-glow voidsteel-font">// VOIDSTEEL_INITIATIVE_LOG (ENTRY: NOXX)</h2>
             <blockquote class="text-center italic text-xl text-slate-gray max-w-4xl mx-auto border-l-4 border-voidsteel-blue pl-6 py-2">
                 "The system requires heavy, industrial stability. My function is the seamless integration of high-impact visual design with fault-tolerant code. Every output must reflect the relentless, endless nature of the VOIDSTEEL world."
             </blockquote>
             <div class="text-center mt-6 text-sm font-mono text-ion-green voidsteel-font">
-                 [STATUS: SYNCHRONIZED | PRECISION: 100%]
+                    [STATUS: SYNCHRONIZED | PRECISION: 100%]
             </div>
         </section>
         
-        <!-- 4. Real-Time Collaborative Chat System (New Section) -->
         <section id="chat-container" class="mt-20 md:mt-32">
-            <!-- Header uses blocky font -->
             <h2 class="text-4xl font-bold text-center mb-6 text-ion-green voidsteel-title-glow voidsteel-font">:: VOIDSTEEL_COMMUNICATION_CHANNEL</h2>
             <p class="text-center text-sm font-mono text-slate-gray mb-6 voidsteel-font">Type <code class="text-voidsteel-blue">/secret</code> to activate the hidden diagnostic module (game).</p>
 
-            <!-- Main Chat Interface Container -->
             <div id="main-chat-interface" class="max-w-3xl mx-auto bg-void-gray/70 backdrop-blur-lg rounded-xl shadow-2xl border border-voidsteel-blue/30 overflow-hidden hidden">
-                <!-- Chat Log -->
                 <div id="chat-log" class="h-80 p-4 space-y-3 overflow-y-auto bg-obsidian/80 border-b border-voidsteel-blue/50">
                     <p id="auth-status" class="text-center text-sm font-mono text-voidsteel-blue voidsteel-font">[STATUS: CONNECTING...]</p>
-                    <!-- Messages will be injected here -->
-                </div>
+                    </div>
                 
-                <!-- Chat Input -->
                 <div class="p-4 flex gap-2">
                     <input type="text" id="chat-input" placeholder="Enter message or /secret protocol..." 
-                           class="flex-grow p-3 rounded-md bg-obsidian text-slate-gray border border-void-gray focus:border-voidsteel-blue focus:ring focus:ring-voidsteel-blue/50 transition duration-200 voidsteel-font"
-                           onkeypress="if(event.key === 'Enter') { sendMessage(); }">
+                            class="flex-grow p-3 rounded-md bg-obsidian text-slate-gray border border-void-gray focus:border-voidsteel-blue focus:ring focus:ring-voidsteel-blue/50 transition duration-200 voidsteel-font"
+                            onkeypress="if(event.key === 'Enter') { sendMessage(); }">
                     <button onclick="sendMessage()" class="glowing-button px-4 py-3 text-sm rounded-md shadow-lg flex-shrink-0 voidsteel-font">
                         SEND
                     </button>
                 </div>
             </div>
 
-            <!-- Codename Input Interface -->
             <div id="codename-input-interface" class="max-w-xl mx-auto p-8 rounded-xl bg-void-gray/70 backdrop-blur-lg shadow-2xl border border-aether-purple/50">
                 <h3 class="text-2xl font-bold mb-4 text-aether-purple voidsteel-font">// IDENTIFY_PROTOCOL_REQUIRED</h3>
                 <p class="text-slate-gray mb-4">Please enter your VOIDSTEEL **Codename** to initiate the secure data stream.</p>
                 <div class="flex gap-2">
                     <input type="text" id="codename-input" placeholder="Codename..." 
-                           class="flex-grow p-3 rounded-md bg-obsidian text-ion-green border border-aether-purple focus:border-aether-purple focus:ring focus:ring-aether-purple/50 transition duration-200 voidsteel-font"
-                           onkeypress="if(event.key === 'Enter') { setCodename(); }">
+                            class="flex-grow p-3 rounded-md bg-obsidian text-ion-green border border-aether-purple focus:border-aether-purple focus:ring focus:ring-aether-purple/50 transition duration-200 voidsteel-font"
+                            onkeypress="if(event.key === 'Enter') { setCodename(); }">
                     <button onclick="setCodename()" class="glowing-button px-4 py-3 text-sm rounded-md shadow-lg flex-shrink-0 voidsteel-font" style="background-color: var(--aether-purple); box-shadow: 0 0 10px var(--aether-purple);">
                         SYNC
                     </button>
@@ -285,12 +268,13 @@
         
     </main>
 
-    <!-- Footer -->
     <footer class="mt-20 py-8 border-t border-void-gray text-center text-slate-gray">
+        <p class="text-sm font-mono text-voidsteel-blue mb-1">
+            // ALL GLORY TO OUR LEADER: <span class="text-ion-green">ManaZ</span>
+        </p>
         <p class="text-sm font-mono">// VOIDSTEEL SYSTEM BOOTSTRAP | NOXX 2025</p>
     </footer>
 
-    <!-- Firebase SDK Imports -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
@@ -481,7 +465,7 @@
                             <p class="text-sm text-slate-gray mb-3 voidsteel-font">Goal: Guess the system code (1-10) in the fewest attempts.</p>
                             <div class="flex gap-2">
                                 <input type="number" id="game-guess-input" min="1" max="10" placeholder="Enter Code (1-10)"
-                                       class="flex-grow p-2 rounded-md bg-void-gray text-ion-green border border-aether-purple focus:ring-aether-purple/70 voidsteel-font">
+                                        class="flex-grow p-2 rounded-md bg-void-gray text-ion-green border border-aether-purple focus:ring-aether-purple/70 voidsteel-font">
                                 <button id="game-button" onclick="tryGameGuess()" class="px-4 py-2 bg-aether-purple text-white rounded-md hover:bg-aether-purple/80 transition duration-150 voidsteel-font">
                                     EXECUTE
                                 </button>
@@ -496,7 +480,7 @@
                             <div class="inline-block p-2 rounded-lg bg-crimson-pulse/20 text-slate-gray max-w-xs md:max-w-md break-words voidsteel-font">${data.text}</div>
                         `;
                     } else if (data.userId === 'SYSTEM') {
-                         // System messages (Ion Green for stability)
+                           // System messages (Ion Green for stability)
                         messageElement.className = 'text-center';
                         messageElement.innerHTML = `
                             <div class="inline-block px-3 py-1 rounded-full bg-ion-green/10 text-ion-green text-xs font-mono border border-ion-green/50 voidsteel-font">${data.text}</div>
