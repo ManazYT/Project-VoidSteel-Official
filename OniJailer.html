@@ -3,17 +3,25 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ONIJAILER Dashboard</title>
+<title>ONIJAILER Dashboard | Strategic Architect</title>
 <style>
+/* ---------------------------------- */
+/* GLOBAL RESET & BASE STYLES         */
+/* ---------------------------------- */
 *{margin:0;padding:0;box-sizing:border-box;}
 html,body{
-  width:100%;height:100%;font-family:'Courier New',monospace;
-  background:#0B0C10;color:#C5C6C7;overflow-x:hidden;
+  width:100%;height:100%;
+  font-family:'Courier New',monospace;
+  background:#0B0C10;
+  color:#C5C6C7;
+  overflow-x:hidden; /* Crucial for preventing horizontal scroll on small devices */
+  font-size: 16px; /* Base font size */
 }
 
+/* ---------------------------------- */
+/* BACKGROUND EFFECTS                 */
+/* ---------------------------------- */
 #matrixCanvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:0.3;}
-
-/* Dark Tech Grid Overlay */
 #gridOverlay{
   position:fixed;top:0;left:0;width:100%;height:100%;z-index:1;pointer-events:none;
   background-image:
@@ -22,32 +30,44 @@ html,body{
   background-size:50px 50px;
   opacity:0.4;
 }
+@keyframes scanline{
+  0%{transform:translateY(-100%);}
+  100%{transform:translateY(100vh);}
+}
+.scanline{
+  position:fixed;top:0;left:0;width:100%;height:2px;
+  background:linear-gradient(transparent,rgba(102,252,241,0.3),transparent);
+  z-index:5;pointer-events:none;
+  animation:scanline 8s linear infinite;
+}
 
-/* Navigation Bar */
+/* ---------------------------------- */
+/* NAVIGATION BAR                     */
+/* ---------------------------------- */
 #navbar{
   position:fixed;top:0;left:0;right:0;height:60px;
-  background:rgba(11,12,16,0.98);
-  border-bottom:1px solid rgba(102,252,241,0.2);
+  background:rgba(11,12,16,0.95);
+  border-bottom:1px solid rgba(102,252,241,0.3);
   box-shadow:0 4px 30px rgba(0,0,0,0.8);
   z-index:100;
   display:none;
   align-items:center;
   padding:0 40px;
-  backdrop-filter:blur(20px);
+  backdrop-filter:blur(15px);
 }
 #navbar .logo{
   font-size:1.4rem;
   font-weight:bold;
   color:#66FCF1;
-  text-shadow:0 0 20px rgba(102,252,241,0.5);
-  letter-spacing:3px;
+  text-shadow:0 0 15px rgba(102,252,241,0.6);
+  letter-spacing:4px;
   flex:1;
 }
 #homeBtn{
-  padding:10px 28px;
+  padding:10px 20px; /* Reduced horizontal padding slightly */
   background:#1F2833;
   color:#66FCF1;
-  border:1px solid rgba(102,252,241,0.3);
+  border:1px solid rgba(102,252,241,0.4);
   border-radius:2px;
   cursor:pointer;
   font-size:0.9rem;
@@ -55,23 +75,30 @@ html,body{
   letter-spacing:1px;
   transition:all 0.3s ease;
   text-transform:uppercase;
+  outline:none;
 }
 #homeBtn:hover{
   background:#66FCF1;
   color:#0B0C10;
   border-color:#66FCF1;
-  box-shadow:0 0 20px rgba(102,252,241,0.4);
+  box-shadow:0 0 20px rgba(102,252,241,0.5);
+  transform:translateY(-1px);
 }
 
+/* ---------------------------------- */
+/* HEADER & MAIN LAYOUT               */
+/* ---------------------------------- */
 #header{
   position:fixed;top:100px;width:100%;text-align:center;
-  font-size:4rem;font-weight:bold;
+  font-size:4rem;
+  font-weight:bold;
   color:#66FCF1;
   text-shadow:0 0 30px rgba(102,252,241,0.6);
   z-index:10;
   display:none;
   letter-spacing:12px;
   animation:headerGlow 3s ease-in-out infinite;
+  white-space: nowrap; /* Prevent line break on smaller screens for main title */
 }
 @keyframes headerGlow{
   0%,100%{text-shadow:0 0 30px rgba(102,252,241,0.6),0 0 60px rgba(102,252,241,0.3);}
@@ -79,15 +106,21 @@ html,body{
 }
 
 .container{
-  position:relative;z-index:2;width:90%;max-width:1200px;
+  position:relative;z-index:2;
+  width:95%; /* Increased width slightly for phones */
+  max-width:1200px;
   margin:200px auto 80px auto;
-  display:flex;flex-direction:column;gap:30px;display:none;
+  display:flex;flex-direction:column;gap:30px;
+  display:none;
 }
 
+/* ---------------------------------- */
+/* PANEL STYLES & ANIMATION           */
+/* ---------------------------------- */
 .panel{
-  background:rgba(31,40,51,0.6);
+  background:rgba(31,40,51,0.65);
   border:1px solid rgba(102,252,241,0.15);
-  border-left:3px solid #66FCF1;
+  border-left:4px solid #66FCF1;
   padding:35px 40px;
   backdrop-filter:blur(10px);
   transform:translateY(50px);
@@ -96,16 +129,14 @@ html,body{
   transition:all 0.4s ease;
   position:relative;
   box-shadow:0 8px 32px rgba(0,0,0,0.6);
+  overflow:hidden;
 }
 .panel::before{
   content:'';
-  position:absolute;
-  top:0;left:0;
-  width:0;
-  height:100%;
+  position:absolute;top:0;left:0;
+  width:0;height:100%;
   background:rgba(102,252,241,0.03);
-  transition:width 0.4s ease;
-  z-index:0;
+  transition:width 0.4s ease;z-index:0;
 }
 .panel:hover::before{width:100%;}
 .panel:hover{
@@ -113,14 +144,12 @@ html,body{
   box-shadow:0 8px 40px rgba(102,252,241,0.15);
   transform:translateX(5px);
 }
-
 .panel:nth-child(1){animation-delay:0.1s;}
 .panel:nth-child(2){animation-delay:0.2s;}
 .panel:nth-child(3){animation-delay:0.3s;}
 .panel:nth-child(4){animation-delay:0.4s;}
 .panel:nth-child(5){animation-delay:0.5s;}
 .panel:nth-child(6){animation-delay:0.6s;}
-.panel:nth-child(7){animation-delay:0.7s;}
 
 @keyframes slideUp{
   0%{opacity:0;transform:translateY(50px);}
@@ -134,16 +163,12 @@ html,body{
   padding-bottom:15px;
   text-transform:uppercase;
   letter-spacing:3px;
-  position:relative;
-  z-index:1;
+  position:relative;z-index:1;
   font-weight:600;
 }
 .panel h2::after{
-  content:'';
-  position:absolute;
-  bottom:0;left:0;
-  width:60px;
-  height:2px;
+  content:'';position:absolute;bottom:0;left:0;
+  width:80px;height:2px;
   background:linear-gradient(90deg,#66FCF1,transparent);
 }
 
@@ -151,12 +176,14 @@ html,body{
   font-size:1.05rem;
   line-height:1.8rem;
   margin-bottom:15px;
-  position:relative;
-  z-index:1;
+  position:relative;z-index:1;
   color:#C5C6C7;
 }
 .panel p strong{color:#66FCF1;}
 
+/* ---------------------------------- */
+/* BUTTON STYLES                      */
+/* ---------------------------------- */
 button{
   display:inline-block;
   margin:15px 10px 5px 0;
@@ -173,114 +200,111 @@ button{
   text-transform:uppercase;
   position:relative;
   overflow:hidden;
+  outline:none;
 }
 button::before{
-  content:'';
-  position:absolute;
-  top:0;left:-100%;
+  content:'';position:absolute;top:0;left:-100%;
   width:100%;height:100%;
   background:linear-gradient(90deg,transparent,rgba(102,252,241,0.2),transparent);
   transition:left 0.5s ease;
 }
 button:hover::before{left:100%;}
 button:hover{
-  background:#66FCF1;
-  color:#0B0C10;
-  border-color:#66FCF1;
+  background:#66FCF1;color:#0B0C10;border-color:#66FCF1;
   box-shadow:0 0 20px rgba(102,252,241,0.4);
   transform:translateY(-2px);
 }
 button:active{transform:translateY(0);}
 
-.sudoku-grid{
-  display:grid;
-  grid-template-columns:repeat(9,1fr);
-  gap:2px;
-  max-width:450px;
-  margin-top:20px;
-  background:rgba(102,252,241,0.2);
-  padding:2px;
-  box-shadow:0 0 30px rgba(102,252,241,0.2);
-}
-.sudoku-cell{
-  aspect-ratio:1;
-  background:#1F2833;
-  color:#66FCF1;
-  font-size:1.3rem;
-  text-align:center;
-  border:1px solid rgba(102,252,241,0.15);
-  user-select:none;
-  transition:all 0.2s ease;
-  font-weight:bold;
-}
-.sudoku-cell:not(:disabled){cursor:pointer;}
-.sudoku-cell:not(:disabled):hover{
-  background:#2A3440;
-  border-color:#66FCF1;
-}
-.sudoku-cell:focus{
-  outline:none;
-  border:2px solid #66FCF1;
-  background:#2A3440;
-  box-shadow:0 0 15px rgba(102,252,241,0.3);
-}
-.sudoku-cell:disabled{
-  background:#151A21;
-  color:#45A29E;
-  cursor:not-allowed;
-}
-
-/* 3x3 box borders */
-.sudoku-cell:nth-child(3n){border-right:2px solid rgba(102,252,241,0.4);}
-.sudoku-cell:nth-child(n+19):nth-child(-n+27){border-bottom:2px solid rgba(102,252,241,0.4);}
-.sudoku-cell:nth-child(n+46):nth-child(-n+54){border-bottom:2px solid rgba(102,252,241,0.4);}
-
+/* ---------------------------------- */
+/* STATUS MESSAGE                     */
+/* ---------------------------------- */
 .status-message{
   margin-top:15px;
-  font-size:1rem;
-  font-weight:bold;
+  font-size:1rem;font-weight:bold;
   padding:12px 20px;
   display:inline-block;
   transition:all 0.3s ease;
   border-left:3px solid;
-  letter-spacing:1px;
-  text-transform:uppercase;
+  letter-spacing:1px;text-transform:uppercase;
 }
 .status-success{
-  color:#66FCF1;
-  background:rgba(102,252,241,0.1);
-  border-color:#66FCF1;
+  color:#66FCF1;background:rgba(102,252,241,0.1);border-color:#66FCF1;
 }
 .status-error{
-  color:#FF6B6B;
-  background:rgba(255,107,107,0.1);
-  border-color:#FF6B6B;
+  color:#FF6B6B;background:rgba(255,107,107,0.1);border-color:#FF6B6B;
 }
 
-/* Scanline effect */
-@keyframes scanline{
-  0%{transform:translateY(-100%);}
-  100%{transform:translateY(100vh);}
-}
-.scanline{
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:2px;
-  background:linear-gradient(transparent,rgba(102,252,241,0.3),transparent);
-  z-index:5;
-  pointer-events:none;
-  animation:scanline 8s linear infinite;
+/* ---------------------------------- */
+/* MEDIA QUERIES (MOBILE OPTIMIZATION)*/
+/* ---------------------------------- */
+@media (max-width: 768px) {
+  /* GLOBAL SCALING */
+  html { font-size: 14px; } /* Reduce base font for mobile */
+  
+  /* NAVBAR */
+  #navbar{
+    height: 50px; /* Shorter bar */
+    padding: 0 15px; /* Less horizontal padding */
+  }
+  #navbar .logo{
+    font-size: 1.1rem; /* Smaller logo */
+    letter-spacing: 2px;
+  }
+  #homeBtn{
+    padding: 8px 15px; /* Smaller button */
+    font-size: 0.8rem;
+  }
+
+  /* HEADER */
+  #header{
+    top: 75px; /* Move title up since navbar is shorter */
+    font-size: 2.2rem;
+    letter-spacing: 6px;
+    padding: 0 10px; /* Ensure title doesn't hit screen edges */
+  }
+
+  /* CONTAINER/PANELS */
+  .container{
+    margin-top: 150px; /* Adjust top margin to clear fixed header/title */
+    width: 95%; /* Maximize use of screen width */
+    gap: 20px; /* Reduced space between panels */
+  }
+  .panel{
+    padding: 20px; /* Less padding inside panels */
+  }
+  .panel h2{
+    font-size: 1.2rem; /* Smaller panel titles */
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+  }
+  .panel h2::after{
+    width: 50px; /* Shorter underline */
+  }
+  .panel p{
+    font-size: 0.95rem; /* Readable body text */
+    line-height: 1.6rem;
+  }
+
+  /* BUTTONS */
+  button{
+    display: block; /* Force buttons to stack vertically */
+    width: 100%; /* Full width for easy tapping */
+    margin: 10px 0; /* Vertical margin between stacked buttons */
+    padding: 10px 15px;
+  }
+  .status-message{
+      display: block;
+      width: 100%;
+  }
 }
 
-@media(max-width:768px){
-  #header{font-size:2.2rem;letter-spacing:6px;}
-  .panel{padding:25px;}
-  .panel h2{font-size:1.4rem;}
-  .panel p{font-size:0.95rem;}
-  .sudoku-grid{max-width:100%;}
-  #navbar{padding:0 20px;}
+/* Optional: Small tablet/large phone breakpoint */
+@media (max-width: 480px) {
+    #header{
+        font-size: 1.8rem;
+        letter-spacing: 4px;
+    }
 }
 </style>
 </head>
@@ -290,13 +314,11 @@ button:active{transform:translateY(0);}
 <div id="gridOverlay"></div>
 <div class="scanline"></div>
 
-<!-- Navigation Bar -->
 <div id="navbar">
   <div class="logo">◢ ONIJAILER</div>
   <button id="homeBtn" onclick="goHome()">← HOME</button>
 </div>
 
-<!-- Boot Sequence -->
 <div id="bootSequence" style="position:fixed;top:0;left:0;width:100%;height:100%;background:#0B0C10;z-index:200;color:#66FCF1;font-family:monospace;overflow:hidden;padding:30px;">
   <pre id="bootText" style="font-size:1rem;line-height:1.4;text-shadow:0 0 10px rgba(102,252,241,0.5);"></pre>
 </div>
@@ -340,15 +362,6 @@ button:active{transform:translateY(0);}
     <p id="copyStatus" class="status-message" style="display:none;"></p>
   </div>
 
-  <div class="panel sudoku-panel">
-    <h2>∎ Logic Matrix</h2>
-    <p>Execute logical reasoning protocol. Complete the 9×9 matrix ensuring each row, column, and 3×3 sector contains unique digits 1-9.</p>
-    <div class="sudoku-grid" id="sudokuGrid"></div>
-    <button onclick="checkSudoku()">[ VALIDATE ]</button>
-    <button onclick="resetSudoku()">[ RESET ]</button>
-    <p id="sudokuStatus" class="status-message" style="display:none;"></p>
-  </div>
-
   <div class="panel">
     <h2>∎ Communication Channel</h2>
     <p>Establish direct contact via secure channels for collaboration proposals, technical queries, or mission-critical discussions. Available for consultation with tech professionals and content creators.</p>
@@ -358,16 +371,20 @@ button:active{transform:translateY(0);}
 </div>
 
 <script>
+// ----------------------------------
 // MATRIX BACKGROUND
+// ----------------------------------
 const mCanvas=document.getElementById('matrixCanvas');
 const mCtx=mCanvas.getContext('2d');
 let mw=mCanvas.width=window.innerWidth,mh=mCanvas.height=window.innerHeight;
 const mLetters='01';
 const mFont=14;
-const mCols=Math.floor(mw/mFont);
-const mDrops=Array(mCols).fill(0);
+let mCols=Math.floor(mw/mFont); // Changed to let
+let mDrops=Array(mCols).fill(0).map(() => Math.floor(Math.random() * mh / mFont)); // Changed to let
+let animationFrameId;
+
 function drawMatrix(){
-  mCtx.fillStyle='rgba(11,12,16,0.05)';
+  mCtx.fillStyle='rgba(11,12,16,0.08)'; 
   mCtx.fillRect(0,0,mw,mh);
   mCtx.fillStyle='#66FCF1';
   mCtx.font=mFont+'px monospace';
@@ -375,17 +392,25 @@ function drawMatrix(){
     const t=mLetters.charAt(Math.floor(Math.random()*mLetters.length));
     mCtx.fillText(t,i*mFont,mDrops[i]*mFont);
     mDrops[i]++;
-    if(mDrops[i]*mFont>mh||Math.random()>0.98)mDrops[i]=0;
+    if(mDrops[i]*mFont>mh||Math.random()>0.985)mDrops[i]=0;
   }
-  requestAnimationFrame(drawMatrix);
+  animationFrameId = requestAnimationFrame(drawMatrix);
 }
 drawMatrix();
+
 window.addEventListener('resize',()=>{
+  cancelAnimationFrame(animationFrameId);
   mw=mCanvas.width=window.innerWidth;
   mh=mCanvas.height=window.innerHeight;
+  // Re-calculate number of columns and reset drops on resize
+  mCols = Math.floor(mw / mFont);
+  mDrops = Array(mCols).fill(0).map(() => Math.floor(Math.random() * mh / mFont));
+  drawMatrix();
 });
 
-// BOOT SEQUENCE
+// ----------------------------------
+// BOOT SEQUENCE (Unchanged)
+// ----------------------------------
 const bootText=document.getElementById('bootText');
 const bootLines=[
   "> INITIALIZING ONIJAILER CORE SYSTEMS...",
@@ -397,13 +422,17 @@ const bootLines=[
   "> SYSTEM READY"
 ];
 let bootIndex=0,charIndex=0;
+
 function bootStep(){
   if(bootIndex>=bootLines.length){
     setTimeout(()=>{
-      document.getElementById('bootSequence').style.display='none';
-      document.getElementById('navbar').style.display='flex';
-      document.getElementById('header').style.display='block';
-      document.getElementById('mainContainer').style.display='flex';
+      document.getElementById('bootSequence').style.opacity = 0;
+      setTimeout(() => {
+          document.getElementById('bootSequence').style.display='none';
+          document.getElementById('navbar').style.display='flex';
+          document.getElementById('header').style.display='block';
+          document.getElementById('mainContainer').style.display='flex';
+      }, 500);
     },500);
     return;
   }
@@ -417,22 +446,36 @@ function bootStep(){
   }
   setTimeout(bootStep,20);
 }
+document.getElementById('bootSequence').style.transition = 'opacity 0.5s ease-out';
 bootStep();
+
 document.getElementById('bootSequence').addEventListener('click',()=>{
-  bootIndex=bootLines.length;
-  bootText.textContent+='\n> BOOT SEQUENCE COMPLETE\n';
-  bootStep();
+  if(bootIndex < bootLines.length) {
+      bootIndex=bootLines.length;
+      bootText.textContent+='\n> BOOT SEQUENCE SKIPPED\n';
+      document.getElementById('bootSequence').style.opacity = 0;
+      setTimeout(() => {
+          document.getElementById('bootSequence').style.display='none';
+          document.getElementById('navbar').style.display='flex';
+          document.getElementById('header').style.display='block';
+          document.getElementById('mainContainer').style.display='flex';
+      }, 300);
+  }
 });
 
-// HOME BUTTON
+
+// ----------------------------------
+// UTILITY FUNCTIONS (Unchanged)
+// ----------------------------------
+
 function goHome(){
   window.location.href='index.html';
 }
 
-// YOUTUBE
 function copyYTLink(){
   const yt='https://www.youtube.com/@TroubleEditz623';
   const status=document.getElementById('copyStatus');
+  
   if(navigator.clipboard){
     navigator.clipboard.writeText(yt).then(()=>{
       status.textContent='► Link copied to clipboard';
@@ -440,120 +483,35 @@ function copyYTLink(){
       status.style.display='inline-block';
       setTimeout(()=>{status.style.display='none';},3000);
     },()=>{
-      prompt('Copy this link:',yt);
+      fallbackCopy(yt);
     });
   }else{
-    prompt('Copy this link:',yt);
+    fallbackCopy(yt);
+  }
+
+  function fallbackCopy(text) {
+      const tempInput = document.createElement('textarea');
+      tempInput.value = text;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand('copy');
+      document.body.removeChild(tempInput);
+      status.textContent='► Link copied (Legacy)';
+      status.className='status-message status-success';
+      status.style.display='inline-block';
+      setTimeout(()=>{status.style.display='none';},3000);
   }
 }
+
 function visitYT(){
   window.open('https://www.youtube.com/@TroubleEditz623','_blank');
 }
 
-// CONTACT
 function openDiscord(){
   window.open('https://discord.com/users/onijailer_ofc','_blank');
 }
 function openEmail(){
   window.location.href='mailto:onigirijailer@gmail.com';
-}
-
-// SUDOKU GAME
-const sudokuGrid=document.getElementById('sudokuGrid');
-const initialPuzzle=[
-  [5,3,0,0,7,0,0,0,0],
-  [6,0,0,1,9,5,0,0,0],
-  [0,9,8,0,0,0,0,6,0],
-  [8,0,0,0,6,0,0,0,3],
-  [4,0,0,8,0,3,0,0,1],
-  [7,0,0,0,2,0,0,0,6],
-  [0,6,0,0,0,0,2,8,0],
-  [0,0,0,4,1,9,0,0,5],
-  [0,0,0,0,8,0,0,7,9]
-];
-let puzzle=JSON.parse(JSON.stringify(initialPuzzle));
-
-function createSudokuGrid(){
-  sudokuGrid.innerHTML='';
-  for(let r=0;r<9;r++){
-    for(let c=0;c<9;c++){
-      const input=document.createElement('input');
-      input.type='text';
-      input.maxLength='1';
-      input.className='sudoku-cell';
-      input.pattern='[1-9]';
-      if(puzzle[r][c]!==0){
-        input.value=puzzle[r][c];
-        input.disabled=true;
-      }
-      input.dataset.row=r;
-      input.dataset.col=c;
-      input.addEventListener('input',function(e){
-        this.value=this.value.replace(/[^1-9]/g,'');
-      });
-      sudokuGrid.appendChild(input);
-    }
-  }
-}
-createSudokuGrid();
-
-function checkSudoku(){
-  const status=document.getElementById('sudokuStatus');
-  let correct=true;
-  const inputs=sudokuGrid.querySelectorAll('input');
-  const currentGrid=Array(9).fill().map(()=>Array(9));
-  
-  for(let i=0;i<9;i++){
-    for(let j=0;j<9;j++){
-      const val=parseInt(inputs[i*9+j].value);
-      if(isNaN(val)||val<1||val>9){
-        status.textContent='► INCOMPLETE MATRIX';
-        status.className='status-message status-error';
-        status.style.display='inline-block';
-        return;
-      }
-      currentGrid[i][j]=val;
-    }
-  }
-  
-  function isValid(arr){return new Set(arr).size===9&&arr.every(n=>n>=1&&n<=9);}
-  
-  for(let i=0;i<9;i++){
-    const row=currentGrid[i];
-    const col=currentGrid.map(r=>r[i]);
-    if(!isValid(row)||!isValid(col)){correct=false;break;}
-  }
-  
-  if(correct){
-    for(let br=0;br<3;br++){
-      for(let bc=0;bc<3;bc++){
-        const box=[];
-        for(let r=0;r<3;r++){
-          for(let c=0;c<3;c++){
-            box.push(currentGrid[br*3+r][bc*3+c]);
-          }
-        }
-        if(!isValid(box)){correct=false;break;}
-      }
-      if(!correct)break;
-    }
-  }
-  
-  if(correct){
-    status.textContent='► MATRIX SOLVED';
-    status.className='status-message status-success';
-  }else{
-    status.textContent='► ERROR DETECTED';
-    status.className='status-message status-error';
-  }
-  status.style.display='inline-block';
-}
-
-function resetSudoku(){
-  puzzle=JSON.parse(JSON.stringify(initialPuzzle));
-  createSudokuGrid();
-  const status=document.getElementById('sudokuStatus');
-  status.style.display='none';
 }
 </script>
 
