@@ -1,76 +1,561 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test Page — VoidSteel</title>
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Rajdhani:wght@400&display=swap" rel="stylesheet">
-    <style>
-        /* Basic dark neon theme */
-        body {
-            margin: 0;
-            font-family: 'Rajdhani', sans-serif;
-            background-color: #0B0C10; /* Obsidian Black */
-            color: #C5C6C7; /* Slate Gray */
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            text-align: center;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ONIJAILER Dashboard</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{
+  width:100%;height:100%;font-family:'Courier New',monospace;
+  background:#0B0C10;color:#C5C6C7;overflow-x:hidden;
+}
 
-        h1 {
-            font-family: 'Orbitron', sans-serif;
-            color: #00E0FF; /* Voidsteel Blue */
-            margin-bottom: 40px;
-            text-transform: uppercase;
-            font-size: 2.5rem;
-            letter-spacing: 2px;
-        }
+#matrixCanvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:0.3;}
 
-        .placeholder {
-            width: 400px;
-            height: 200px;
-            background-color: #1F2833; /* Void Gray */
-            border: 2px dashed #00E0FF;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: #00E0FF;
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 1.2rem;
-            margin-bottom: 50px;
-        }
+/* Dark Tech Grid Overlay */
+#gridOverlay{
+  position:fixed;top:0;left:0;width:100%;height:100%;z-index:1;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(102,252,241,0.03) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(102,252,241,0.03) 1px,transparent 1px);
+  background-size:50px 50px;
+  opacity:0.4;
+}
 
-        .btn-back {
-            padding: 15px 30px;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 700;
-            font-size: 1rem;
-            color: #0B0C10;
-            background-color: #00E0FF;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
+/* Navigation Bar */
+#navbar{
+  position:fixed;top:0;left:0;right:0;height:60px;
+  background:rgba(11,12,16,0.98);
+  border-bottom:1px solid rgba(102,252,241,0.2);
+  box-shadow:0 4px 30px rgba(0,0,0,0.8);
+  z-index:100;
+  display:none;
+  align-items:center;
+  padding:0 40px;
+  backdrop-filter:blur(20px);
+}
+#navbar .logo{
+  font-size:1.4rem;
+  font-weight:bold;
+  color:#66FCF1;
+  text-shadow:0 0 20px rgba(102,252,241,0.5);
+  letter-spacing:3px;
+  flex:1;
+}
+#homeBtn{
+  padding:10px 28px;
+  background:#1F2833;
+  color:#66FCF1;
+  border:1px solid rgba(102,252,241,0.3);
+  border-radius:2px;
+  cursor:pointer;
+  font-size:0.9rem;
+  font-weight:bold;
+  letter-spacing:1px;
+  transition:all 0.3s ease;
+  text-transform:uppercase;
+}
+#homeBtn:hover{
+  background:#66FCF1;
+  color:#0B0C10;
+  border-color:#66FCF1;
+  box-shadow:0 0 20px rgba(102,252,241,0.4);
+}
 
-        .btn-back:hover {
-            background-color: #00B8CC;
-            transform: scale(1.05);
-        }
-    </style>
+#header{
+  position:fixed;top:100px;width:100%;text-align:center;
+  font-size:4rem;font-weight:bold;
+  color:#66FCF1;
+  text-shadow:0 0 30px rgba(102,252,241,0.6);
+  z-index:10;
+  display:none;
+  letter-spacing:12px;
+  animation:headerGlow 3s ease-in-out infinite;
+}
+@keyframes headerGlow{
+  0%,100%{text-shadow:0 0 30px rgba(102,252,241,0.6),0 0 60px rgba(102,252,241,0.3);}
+  50%{text-shadow:0 0 40px rgba(102,252,241,0.8),0 0 80px rgba(102,252,241,0.4);}
+}
+
+.container{
+  position:relative;z-index:2;width:90%;max-width:1200px;
+  margin:200px auto 80px auto;
+  display:flex;flex-direction:column;gap:30px;display:none;
+}
+
+.panel{
+  background:rgba(31,40,51,0.6);
+  border:1px solid rgba(102,252,241,0.15);
+  border-left:3px solid #66FCF1;
+  padding:35px 40px;
+  backdrop-filter:blur(10px);
+  transform:translateY(50px);
+  opacity:0;
+  animation:slideUp 0.8s forwards;
+  transition:all 0.4s ease;
+  position:relative;
+  box-shadow:0 8px 32px rgba(0,0,0,0.6);
+}
+.panel::before{
+  content:'';
+  position:absolute;
+  top:0;left:0;
+  width:0;
+  height:100%;
+  background:rgba(102,252,241,0.03);
+  transition:width 0.4s ease;
+  z-index:0;
+}
+.panel:hover::before{width:100%;}
+.panel:hover{
+  border-color:rgba(102,252,241,0.4);
+  box-shadow:0 8px 40px rgba(102,252,241,0.15);
+  transform:translateX(5px);
+}
+
+.panel:nth-child(1){animation-delay:0.1s;}
+.panel:nth-child(2){animation-delay:0.2s;}
+.panel:nth-child(3){animation-delay:0.3s;}
+.panel:nth-child(4){animation-delay:0.4s;}
+.panel:nth-child(5){animation-delay:0.5s;}
+.panel:nth-child(6){animation-delay:0.6s;}
+.panel:nth-child(7){animation-delay:0.7s;}
+
+@keyframes slideUp{
+  0%{opacity:0;transform:translateY(50px);}
+  100%{opacity:1;transform:translateY(0);}
+}
+
+.panel h2{
+  color:#66FCF1;
+  font-size:1.8rem;
+  margin-bottom:20px;
+  padding-bottom:15px;
+  text-transform:uppercase;
+  letter-spacing:3px;
+  position:relative;
+  z-index:1;
+  font-weight:600;
+}
+.panel h2::after{
+  content:'';
+  position:absolute;
+  bottom:0;left:0;
+  width:60px;
+  height:2px;
+  background:linear-gradient(90deg,#66FCF1,transparent);
+}
+
+.panel p{
+  font-size:1.05rem;
+  line-height:1.8rem;
+  margin-bottom:15px;
+  position:relative;
+  z-index:1;
+  color:#C5C6C7;
+}
+.panel p strong{color:#66FCF1;}
+
+button{
+  display:inline-block;
+  margin:15px 10px 5px 0;
+  padding:12px 30px;
+  background:#1F2833;
+  color:#66FCF1;
+  border:1px solid rgba(102,252,241,0.3);
+  border-radius:0;
+  cursor:pointer;
+  font-size:0.95rem;
+  font-weight:600;
+  letter-spacing:1px;
+  transition:all 0.3s ease;
+  text-transform:uppercase;
+  position:relative;
+  overflow:hidden;
+}
+button::before{
+  content:'';
+  position:absolute;
+  top:0;left:-100%;
+  width:100%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(102,252,241,0.2),transparent);
+  transition:left 0.5s ease;
+}
+button:hover::before{left:100%;}
+button:hover{
+  background:#66FCF1;
+  color:#0B0C10;
+  border-color:#66FCF1;
+  box-shadow:0 0 20px rgba(102,252,241,0.4);
+  transform:translateY(-2px);
+}
+button:active{transform:translateY(0);}
+
+.sudoku-grid{
+  display:grid;
+  grid-template-columns:repeat(9,1fr);
+  gap:2px;
+  max-width:450px;
+  margin-top:20px;
+  background:rgba(102,252,241,0.2);
+  padding:2px;
+  box-shadow:0 0 30px rgba(102,252,241,0.2);
+}
+.sudoku-cell{
+  aspect-ratio:1;
+  background:#1F2833;
+  color:#66FCF1;
+  font-size:1.3rem;
+  text-align:center;
+  border:1px solid rgba(102,252,241,0.15);
+  user-select:none;
+  transition:all 0.2s ease;
+  font-weight:bold;
+}
+.sudoku-cell:not(:disabled){cursor:pointer;}
+.sudoku-cell:not(:disabled):hover{
+  background:#2A3440;
+  border-color:#66FCF1;
+}
+.sudoku-cell:focus{
+  outline:none;
+  border:2px solid #66FCF1;
+  background:#2A3440;
+  box-shadow:0 0 15px rgba(102,252,241,0.3);
+}
+.sudoku-cell:disabled{
+  background:#151A21;
+  color:#45A29E;
+  cursor:not-allowed;
+}
+
+/* 3x3 box borders */
+.sudoku-cell:nth-child(3n){border-right:2px solid rgba(102,252,241,0.4);}
+.sudoku-cell:nth-child(n+19):nth-child(-n+27){border-bottom:2px solid rgba(102,252,241,0.4);}
+.sudoku-cell:nth-child(n+46):nth-child(-n+54){border-bottom:2px solid rgba(102,252,241,0.4);}
+
+.status-message{
+  margin-top:15px;
+  font-size:1rem;
+  font-weight:bold;
+  padding:12px 20px;
+  display:inline-block;
+  transition:all 0.3s ease;
+  border-left:3px solid;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+.status-success{
+  color:#66FCF1;
+  background:rgba(102,252,241,0.1);
+  border-color:#66FCF1;
+}
+.status-error{
+  color:#FF6B6B;
+  background:rgba(255,107,107,0.1);
+  border-color:#FF6B6B;
+}
+
+/* Scanline effect */
+@keyframes scanline{
+  0%{transform:translateY(-100%);}
+  100%{transform:translateY(100vh);}
+}
+.scanline{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:2px;
+  background:linear-gradient(transparent,rgba(102,252,241,0.3),transparent);
+  z-index:5;
+  pointer-events:none;
+  animation:scanline 8s linear infinite;
+}
+
+@media(max-width:768px){
+  #header{font-size:2.2rem;letter-spacing:6px;}
+  .panel{padding:25px;}
+  .panel h2{font-size:1.4rem;}
+  .panel p{font-size:0.95rem;}
+  .sudoku-grid{max-width:100%;}
+  #navbar{padding:0 20px;}
+}
+</style>
 </head>
 <body>
-    <h1>Test Page</h1>
 
-    <div class="placeholder">
-        <!-- This is where something else will go -->
-        Something Else Placeholder
-    </div>
+<canvas id="matrixCanvas"></canvas>
+<div id="gridOverlay"></div>
+<div class="scanline"></div>
 
-    <button class="btn-back" onclick="window.location.href='index.html'">Back to Home</button>
+<!-- Navigation Bar -->
+<div id="navbar">
+  <div class="logo">◢ ONIJAILER</div>
+  <button id="homeBtn" onclick="goHome()">← HOME</button>
+</div>
+
+<!-- Boot Sequence -->
+<div id="bootSequence" style="position:fixed;top:0;left:0;width:100%;height:100%;background:#0B0C10;z-index:200;color:#66FCF1;font-family:monospace;overflow:hidden;padding:30px;">
+  <pre id="bootText" style="font-size:1rem;line-height:1.4;text-shadow:0 0 10px rgba(102,252,241,0.5);"></pre>
+</div>
+
+<div id="header">ONIJAILER</div>
+
+<div class="container" id="mainContainer">
+  <div class="panel">
+    <h2>∎ System Overview</h2>
+    <p>ONIJAILER operates as a <strong>Strategic Architect – Tier-I Quantum</strong>, coordinating AI protocols, mission strategy, and content creation within VoidSteel HQ. This dashboard provides insight into operational flow, key tasks, and technology-driven missions.</p>
+    <p>Operating at the intersection of quantum computing and artificial intelligence, ONIJAILER maintains critical infrastructure and drives innovation across all operational sectors.</p>
+  </div>
+  
+  <div class="panel">
+    <h2>∎ Mission Protocol</h2>
+    <p><strong>Primary Objective:</strong> Maintain AI Core stability and secure quantum nodes. Teams are deployed across high-priority sectors for real-time surveillance and threat analysis.</p>
+    <p><strong>Current Operations:</strong> Advanced content creation, AI protocol monitoring, mission log recording, and maintaining system integrity across distributed networks.</p>
+    <p><strong>System Status:</strong> All nodes operational. Quantum coherence at 99.7%. Network latency: 12ms.</p>
+  </div>
+  
+  <div class="panel">
+    <h2>∎ System Logs</h2>
+    <p><strong>[LOG_001]</strong> Quantum node initialized. AI systems synced. Coherence stable.</p>
+    <p><strong>[LOG_002]</strong> Surveillance protocols activated. Network stability confirmed.</p>
+    <p><strong>[LOG_003]</strong> Data streams optimized for real-time content analysis.</p>
+    <p><strong>[LOG_004]</strong> Neural network training cycle complete. Performance +23% baseline.</p>
+    <p><strong>[LOG_005]</strong> Security matrix updated. All vectors secured.</p>
+  </div>
+
+  <div class="panel">
+    <h2>∎ Content Pipeline</h2>
+    <p>Production pipeline focused on <strong>tech-driven content</strong>, AI experiments, and strategic mission recordings. Each project leverages high-level coordination and innovation within the VoidSteel network infrastructure.</p>
+    <p>Workflow documentation includes algorithm visualizations, deep tech explorations, system tutorials, and cutting-edge AI-driven content for education and analysis purposes.</p>
+  </div>
+  
+  <div class="panel">
+    <h2>∎ Channel Access</h2>
+    <p>Access high-level tech content, experimental AI projects, and mission documentation through the official channel.</p>
+    <button onclick="copyYTLink()">[ COPY LINK ]</button>
+    <button onclick="visitYT()">[ OPEN CHANNEL ]</button>
+    <p id="copyStatus" class="status-message" style="display:none;"></p>
+  </div>
+
+  <div class="panel sudoku-panel">
+    <h2>∎ Logic Matrix</h2>
+    <p>Execute logical reasoning protocol. Complete the 9×9 matrix ensuring each row, column, and 3×3 sector contains unique digits 1-9.</p>
+    <div class="sudoku-grid" id="sudokuGrid"></div>
+    <button onclick="checkSudoku()">[ VALIDATE ]</button>
+    <button onclick="resetSudoku()">[ RESET ]</button>
+    <p id="sudokuStatus" class="status-message" style="display:none;"></p>
+  </div>
+
+  <div class="panel">
+    <h2>∎ Communication Channel</h2>
+    <p>Establish direct contact via secure channels for collaboration proposals, technical queries, or mission-critical discussions. Available for consultation with tech professionals and content creators.</p>
+    <button onclick="openDiscord()">[ DISCORD ]</button>
+    <button onclick="openEmail()">[ EMAIL ]</button>
+  </div>
+</div>
+
+<script>
+// MATRIX BACKGROUND
+const mCanvas=document.getElementById('matrixCanvas');
+const mCtx=mCanvas.getContext('2d');
+let mw=mCanvas.width=window.innerWidth,mh=mCanvas.height=window.innerHeight;
+const mLetters='01';
+const mFont=14;
+const mCols=Math.floor(mw/mFont);
+const mDrops=Array(mCols).fill(0);
+function drawMatrix(){
+  mCtx.fillStyle='rgba(11,12,16,0.05)';
+  mCtx.fillRect(0,0,mw,mh);
+  mCtx.fillStyle='#66FCF1';
+  mCtx.font=mFont+'px monospace';
+  for(let i=0;i<mDrops.length;i++){
+    const t=mLetters.charAt(Math.floor(Math.random()*mLetters.length));
+    mCtx.fillText(t,i*mFont,mDrops[i]*mFont);
+    mDrops[i]++;
+    if(mDrops[i]*mFont>mh||Math.random()>0.98)mDrops[i]=0;
+  }
+  requestAnimationFrame(drawMatrix);
+}
+drawMatrix();
+window.addEventListener('resize',()=>{
+  mw=mCanvas.width=window.innerWidth;
+  mh=mCanvas.height=window.innerHeight;
+});
+
+// BOOT SEQUENCE
+const bootText=document.getElementById('bootText');
+const bootLines=[
+  "> INITIALIZING ONIJAILER CORE SYSTEMS...",
+  "> SYNCING AI PROTOCOLS........................[OK]",
+  "> LOADING QUANTUM MODULES.....................[OK]",
+  "> COMPILING MISSION DATA......................[OK]",
+  "> ESTABLISHING SECURE CONNECTION..............[OK]",
+  "> PREPARING DASHBOARD INTERFACE...............[OK]",
+  "> SYSTEM READY"
+];
+let bootIndex=0,charIndex=0;
+function bootStep(){
+  if(bootIndex>=bootLines.length){
+    setTimeout(()=>{
+      document.getElementById('bootSequence').style.display='none';
+      document.getElementById('navbar').style.display='flex';
+      document.getElementById('header').style.display='block';
+      document.getElementById('mainContainer').style.display='flex';
+    },500);
+    return;
+  }
+  const line=bootLines[bootIndex];
+  bootText.textContent+=line.charAt(charIndex);
+  charIndex++;
+  if(charIndex>=line.length){
+    bootText.textContent+='\n';
+    charIndex=0;
+    bootIndex++;
+  }
+  setTimeout(bootStep,20);
+}
+bootStep();
+document.getElementById('bootSequence').addEventListener('click',()=>{
+  bootIndex=bootLines.length;
+  bootText.textContent+='\n> BOOT SEQUENCE COMPLETE\n';
+  bootStep();
+});
+
+// HOME BUTTON
+function goHome(){
+  window.location.href='index.html';
+}
+
+// YOUTUBE
+function copyYTLink(){
+  const yt='https://www.youtube.com/@TroubleEditz623';
+  const status=document.getElementById('copyStatus');
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(yt).then(()=>{
+      status.textContent='► Link copied to clipboard';
+      status.className='status-message status-success';
+      status.style.display='inline-block';
+      setTimeout(()=>{status.style.display='none';},3000);
+    },()=>{
+      prompt('Copy this link:',yt);
+    });
+  }else{
+    prompt('Copy this link:',yt);
+  }
+}
+function visitYT(){
+  window.open('https://www.youtube.com/@TroubleEditz623','_blank');
+}
+
+// CONTACT
+function openDiscord(){
+  window.open('https://discord.com/users/onijailer_ofc','_blank');
+}
+function openEmail(){
+  window.location.href='mailto:onigirijailer@gmail.com';
+}
+
+// SUDOKU GAME
+const sudokuGrid=document.getElementById('sudokuGrid');
+const initialPuzzle=[
+  [5,3,0,0,7,0,0,0,0],
+  [6,0,0,1,9,5,0,0,0],
+  [0,9,8,0,0,0,0,6,0],
+  [8,0,0,0,6,0,0,0,3],
+  [4,0,0,8,0,3,0,0,1],
+  [7,0,0,0,2,0,0,0,6],
+  [0,6,0,0,0,0,2,8,0],
+  [0,0,0,4,1,9,0,0,5],
+  [0,0,0,0,8,0,0,7,9]
+];
+let puzzle=JSON.parse(JSON.stringify(initialPuzzle));
+
+function createSudokuGrid(){
+  sudokuGrid.innerHTML='';
+  for(let r=0;r<9;r++){
+    for(let c=0;c<9;c++){
+      const input=document.createElement('input');
+      input.type='text';
+      input.maxLength='1';
+      input.className='sudoku-cell';
+      input.pattern='[1-9]';
+      if(puzzle[r][c]!==0){
+        input.value=puzzle[r][c];
+        input.disabled=true;
+      }
+      input.dataset.row=r;
+      input.dataset.col=c;
+      input.addEventListener('input',function(e){
+        this.value=this.value.replace(/[^1-9]/g,'');
+      });
+      sudokuGrid.appendChild(input);
+    }
+  }
+}
+createSudokuGrid();
+
+function checkSudoku(){
+  const status=document.getElementById('sudokuStatus');
+  let correct=true;
+  const inputs=sudokuGrid.querySelectorAll('input');
+  const currentGrid=Array(9).fill().map(()=>Array(9));
+  
+  for(let i=0;i<9;i++){
+    for(let j=0;j<9;j++){
+      const val=parseInt(inputs[i*9+j].value);
+      if(isNaN(val)||val<1||val>9){
+        status.textContent='► INCOMPLETE MATRIX';
+        status.className='status-message status-error';
+        status.style.display='inline-block';
+        return;
+      }
+      currentGrid[i][j]=val;
+    }
+  }
+  
+  function isValid(arr){return new Set(arr).size===9&&arr.every(n=>n>=1&&n<=9);}
+  
+  for(let i=0;i<9;i++){
+    const row=currentGrid[i];
+    const col=currentGrid.map(r=>r[i]);
+    if(!isValid(row)||!isValid(col)){correct=false;break;}
+  }
+  
+  if(correct){
+    for(let br=0;br<3;br++){
+      for(let bc=0;bc<3;bc++){
+        const box=[];
+        for(let r=0;r<3;r++){
+          for(let c=0;c<3;c++){
+            box.push(currentGrid[br*3+r][bc*3+c]);
+          }
+        }
+        if(!isValid(box)){correct=false;break;}
+      }
+      if(!correct)break;
+    }
+  }
+  
+  if(correct){
+    status.textContent='► MATRIX SOLVED';
+    status.className='status-message status-success';
+  }else{
+    status.textContent='► ERROR DETECTED';
+    status.className='status-message status-error';
+  }
+  status.style.display='inline-block';
+}
+
+function resetSudoku(){
+  puzzle=JSON.parse(JSON.stringify(initialPuzzle));
+  createSudokuGrid();
+  const status=document.getElementById('sudokuStatus');
+  status.style.display='none';
+}
+</script>
+
 </body>
 </html>
