@@ -42,6 +42,32 @@ html,body{
 }
 
 /* ---------------------------------- */
+/* GLORY BANNER (New Addition)        */
+/* ---------------------------------- */
+#gloryBanner {
+    position: fixed;
+    top: 60px; /* Positioned just below the navbar */
+    left: 0;
+    right: 0;
+    z-index: 99;
+    padding: 5px 0;
+    text-align: center;
+    background: rgba(102, 252, 241, 0.05); /* Subtle background */
+    border-bottom: 1px solid rgba(102, 252, 241, 0.1);
+    color: #66FCF1;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-shadow: 0 0 5px rgba(102, 252, 241, 0.5);
+    animation: pulse 1.5s infinite alternate;
+    display: none; /* Controlled by JS after boot sequence */
+}
+@keyframes pulse {
+    0% { opacity: 0.6; }
+    100% { opacity: 1; }
+}
+
+/* ---------------------------------- */
 /* NAVIGATION BAR                     */
 /* ---------------------------------- */
 #navbar{
@@ -64,7 +90,7 @@ html,body{
   flex:1;
 }
 #homeBtn{
-  padding:10px 20px; /* Reduced horizontal padding slightly */
+  padding:10px 20px;
   background:#1F2833;
   color:#66FCF1;
   border:1px solid rgba(102,252,241,0.4);
@@ -98,7 +124,7 @@ html,body{
   display:none;
   letter-spacing:12px;
   animation:headerGlow 3s ease-in-out infinite;
-  white-space: nowrap; /* Prevent line break on smaller screens for main title */
+  white-space: nowrap;
 }
 @keyframes headerGlow{
   0%,100%{text-shadow:0 0 30px rgba(102,252,241,0.6),0 0 60px rgba(102,252,241,0.3);}
@@ -107,9 +133,9 @@ html,body{
 
 .container{
   position:relative;z-index:2;
-  width:95%; /* Increased width slightly for phones */
+  width:95%;
   max-width:1200px;
-  margin:200px auto 80px auto;
+  margin:230px auto 80px auto; /* Increased top margin to clear navbar + banner + header */
   display:flex;flex-direction:column;gap:30px;
   display:none;
 }
@@ -132,8 +158,7 @@ html,body{
   overflow:hidden;
 }
 .panel::before{
-  content:'';
-  position:absolute;top:0;left:0;
+  content:'';position:absolute;top:0;left:0;
   width:0;height:100%;
   background:rgba(102,252,241,0.03);
   transition:width 0.4s ease;z-index:0;
@@ -157,13 +182,8 @@ html,body{
 }
 
 .panel h2{
-  color:#66FCF1;
-  font-size:1.8rem;
-  margin-bottom:20px;
-  padding-bottom:15px;
-  text-transform:uppercase;
-  letter-spacing:3px;
-  position:relative;z-index:1;
+  color:#66FCF1;font-size:1.8rem;margin-bottom:20px;padding-bottom:15px;
+  text-transform:uppercase;letter-spacing:3px;position:relative;z-index:1;
   font-weight:600;
 }
 .panel h2::after{
@@ -173,11 +193,8 @@ html,body{
 }
 
 .panel p{
-  font-size:1.05rem;
-  line-height:1.8rem;
-  margin-bottom:15px;
-  position:relative;z-index:1;
-  color:#C5C6C7;
+  font-size:1.05rem;line-height:1.8rem;margin-bottom:15px;
+  position:relative;z-index:1;color:#C5C6C7;
 }
 .panel p strong{color:#66FCF1;}
 
@@ -185,22 +202,11 @@ html,body{
 /* BUTTON STYLES                      */
 /* ---------------------------------- */
 button{
-  display:inline-block;
-  margin:15px 10px 5px 0;
-  padding:12px 30px;
-  background:#1F2833;
-  color:#66FCF1;
-  border:1px solid rgba(102,252,241,0.3);
-  border-radius:0;
-  cursor:pointer;
-  font-size:0.95rem;
-  font-weight:600;
-  letter-spacing:1px;
-  transition:all 0.3s ease;
-  text-transform:uppercase;
-  position:relative;
-  overflow:hidden;
-  outline:none;
+  display:inline-block;margin:15px 10px 5px 0;padding:12px 30px;
+  background:#1F2833;color:#66FCF1;border:1px solid rgba(102,252,241,0.3);
+  border-radius:0;cursor:pointer;font-size:0.95rem;font-weight:600;
+  letter-spacing:1px;transition:all 0.3s ease;text-transform:uppercase;
+  position:relative;overflow:hidden;outline:none;
 }
 button::before{
   content:'';position:absolute;top:0;left:-100%;
@@ -211,8 +217,7 @@ button::before{
 button:hover::before{left:100%;}
 button:hover{
   background:#66FCF1;color:#0B0C10;border-color:#66FCF1;
-  box-shadow:0 0 20px rgba(102,252,241,0.4);
-  transform:translateY(-2px);
+  box-shadow:0 0 20px rgba(102,252,241,0.4);transform:translateY(-2px);
 }
 button:active{transform:translateY(0);}
 
@@ -220,13 +225,9 @@ button:active{transform:translateY(0);}
 /* STATUS MESSAGE                     */
 /* ---------------------------------- */
 .status-message{
-  margin-top:15px;
-  font-size:1rem;font-weight:bold;
-  padding:12px 20px;
-  display:inline-block;
-  transition:all 0.3s ease;
-  border-left:3px solid;
-  letter-spacing:1px;text-transform:uppercase;
+  margin-top:15px;font-size:1rem;font-weight:bold;
+  padding:12px 20px;display:inline-block;transition:all 0.3s ease;
+  border-left:3px solid;letter-spacing:1px;text-transform:uppercase;
 }
 .status-success{
   color:#66FCF1;background:rgba(102,252,241,0.1);border-color:#66FCF1;
@@ -240,66 +241,44 @@ button:active{transform:translateY(0);}
 /* ---------------------------------- */
 @media (max-width: 768px) {
   /* GLOBAL SCALING */
-  html { font-size: 14px; } /* Reduce base font for mobile */
+  html { font-size: 14px; }
   
   /* NAVBAR */
-  #navbar{
-    height: 50px; /* Shorter bar */
-    padding: 0 15px; /* Less horizontal padding */
-  }
-  #navbar .logo{
-    font-size: 1.1rem; /* Smaller logo */
-    letter-spacing: 2px;
-  }
-  #homeBtn{
-    padding: 8px 15px; /* Smaller button */
-    font-size: 0.8rem;
+  #navbar{height: 50px;padding: 0 15px;}
+  #navbar .logo{font-size: 1.1rem;letter-spacing: 2px;}
+  #homeBtn{padding: 8px 15px;font-size: 0.8rem;}
+
+  /* GLORY BANNER */
+  #gloryBanner {
+      top: 50px; /* Positioned just below the shorter navbar */
+      font-size: 0.7rem;
+      padding: 3px 0;
   }
 
   /* HEADER */
   #header{
-    top: 75px; /* Move title up since navbar is shorter */
+    top: 90px; /* Adjusted to clear navbar (50px) + banner (~10px) + space */
     font-size: 2.2rem;
     letter-spacing: 6px;
-    padding: 0 10px; /* Ensure title doesn't hit screen edges */
+    padding: 0 10px;
   }
 
   /* CONTAINER/PANELS */
   .container{
-    margin-top: 150px; /* Adjust top margin to clear fixed header/title */
-    width: 95%; /* Maximize use of screen width */
-    gap: 20px; /* Reduced space between panels */
+    margin-top: 170px; /* Adjusted top margin to clear all fixed elements */
+    width: 95%;
+    gap: 20px;
   }
-  .panel{
-    padding: 20px; /* Less padding inside panels */
-  }
-  .panel h2{
-    font-size: 1.2rem; /* Smaller panel titles */
-    margin-bottom: 10px;
-    padding-bottom: 10px;
-  }
-  .panel h2::after{
-    width: 50px; /* Shorter underline */
-  }
-  .panel p{
-    font-size: 0.95rem; /* Readable body text */
-    line-height: 1.6rem;
-  }
+  .panel{padding: 20px;}
+  .panel h2{font-size: 1.2rem;margin-bottom: 10px;padding-bottom: 10px;}
+  .panel h2::after{width: 50px;}
+  .panel p{font-size: 0.95rem;line-height: 1.6rem;}
 
   /* BUTTONS */
-  button{
-    display: block; /* Force buttons to stack vertically */
-    width: 100%; /* Full width for easy tapping */
-    margin: 10px 0; /* Vertical margin between stacked buttons */
-    padding: 10px 15px;
-  }
-  .status-message{
-      display: block;
-      width: 100%;
-  }
+  button{display: block;width: 100%;margin: 10px 0;padding: 10px 15px;}
+  .status-message{display: block;width: 100%;}
 }
 
-/* Optional: Small tablet/large phone breakpoint */
 @media (max-width: 480px) {
     #header{
         font-size: 1.8rem;
@@ -317,6 +296,10 @@ button:active{transform:translateY(0);}
 <div id="navbar">
   <div class="logo">◢ ONIJAILER</div>
   <button id="homeBtn" onclick="goHome()">← HOME</button>
+</div>
+
+<div id="gloryBanner">
+    All Glory To Our Glorious Leader ManaZ
 </div>
 
 <div id="bootSequence" style="position:fixed;top:0;left:0;width:100%;height:100%;background:#0B0C10;z-index:200;color:#66FCF1;font-family:monospace;overflow:hidden;padding:30px;">
@@ -379,8 +362,8 @@ const mCtx=mCanvas.getContext('2d');
 let mw=mCanvas.width=window.innerWidth,mh=mCanvas.height=window.innerHeight;
 const mLetters='01';
 const mFont=14;
-let mCols=Math.floor(mw/mFont); // Changed to let
-let mDrops=Array(mCols).fill(0).map(() => Math.floor(Math.random() * mh / mFont)); // Changed to let
+let mCols=Math.floor(mw/mFont);
+let mDrops=Array(mCols).fill(0).map(() => Math.floor(Math.random() * mh / mFont));
 let animationFrameId;
 
 function drawMatrix(){
@@ -402,14 +385,13 @@ window.addEventListener('resize',()=>{
   cancelAnimationFrame(animationFrameId);
   mw=mCanvas.width=window.innerWidth;
   mh=mCanvas.height=window.innerHeight;
-  // Re-calculate number of columns and reset drops on resize
   mCols = Math.floor(mw / mFont);
   mDrops = Array(mCols).fill(0).map(() => Math.floor(Math.random() * mh / mFont));
   drawMatrix();
 });
 
 // ----------------------------------
-// BOOT SEQUENCE (Unchanged)
+// BOOT SEQUENCE
 // ----------------------------------
 const bootText=document.getElementById('bootText');
 const bootLines=[
@@ -430,6 +412,7 @@ function bootStep(){
       setTimeout(() => {
           document.getElementById('bootSequence').style.display='none';
           document.getElementById('navbar').style.display='flex';
+          document.getElementById('gloryBanner').style.display='block'; // Display the new banner
           document.getElementById('header').style.display='block';
           document.getElementById('mainContainer').style.display='flex';
       }, 500);
@@ -457,6 +440,7 @@ document.getElementById('bootSequence').addEventListener('click',()=>{
       setTimeout(() => {
           document.getElementById('bootSequence').style.display='none';
           document.getElementById('navbar').style.display='flex';
+          document.getElementById('gloryBanner').style.display='block'; // Display the new banner
           document.getElementById('header').style.display='block';
           document.getElementById('mainContainer').style.display='flex';
       }, 300);
